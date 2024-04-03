@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1000" height="1000" viewBox="0 0 1000 1000" xml:space="preserve">
+<desc>Created with Fabric.js 3.5.0</desc>
+<defs>
+</defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#ffffff"/>
+<g transform="matrix(0 -4.2827 -4.2827 0 500.0011 499.9992)" id="899542">
+<g style="" vector-effect="non-scaling-stroke">
+		<g transform="matrix(1 0 0 1 -64.8745 -0.0225)">
+<linearGradient id="SVGID_4" gradientUnits="objectBoundingBox" gradientTransform="matrix(1 0 0 1 22.6255 105.9125)" x1="0.5" y1="0" x2="0.5" y2="1">
+<stop offset="0%" style="stop-color:rgb(22,176,237);stop-opacity: 0.8"/>
+<stop offset="100%" style="stop-color:rgb(15,89,178);stop-opacity: 0.837"/>
+</linearGradient>
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; is-custom-font: none; font-file-url: none; fill: url(#SVGID_4); fill-rule: evenodd; opacity: 1;" transform=" translate(-22.6255, -105.9125)" d="M 0.027 45.459 L 45.224 -0.173 v 212.171 L 0.027 166.894 V 45.459 z" stroke-linecap="round"/>
+</g>
+		<g transform="matrix(-1 0 0 1 64.4105 -0.011)">
+<linearGradient id="SVGID_5" gradientUnits="objectBoundingBox" gradientTransform="matrix(1 0 0 1 152.0895 105.924)" x1="0.5" y1="0" x2="0.5" y2="1">
+<stop offset="0%" style="stop-color:rgb(125,182,67);stop-opacity: 1"/>
+<stop offset="100%" style="stop-color:rgb(54,117,51);stop-opacity: 1"/>
+</linearGradient>
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; is-custom-font: none; font-file-url: none; fill: url(#SVGID_5); fill-rule: evenodd; opacity: 1;" transform=" translate(-152.0895, -105.924)" d="M 129.337 45.89 L 175.152 -0.149 l -0.928 212.146 l -45.197 -45.104 l 0.31 -121.005 z" stroke-linecap="round"/>
+</g>
+		<g transform="matrix(1 0 0 1 -0.025 0.0235)">
+<linearGradient id="SVGID_6" gradientUnits="objectBoundingBox" gradientTransform="matrix(1 0 0 1 87.475 105.9585)" x1="0.5" y1="0" x2="0.5" y2="1">
+<stop offset="0%" style="stop-color:rgb(136,198,73);stop-opacity: 0.8"/>
+<stop offset="100%" style="stop-color:rgb(67,146,64);stop-opacity: 0.84"/>
+</linearGradient>
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; is-custom-font: none; font-file-url: none; fill: url(#SVGID_6); fill-rule: evenodd; opacity: 1;" transform=" translate(-87.475, -105.9585)" d="M 45.194 -0.137 L 162.7 179.173 l -32.882 32.881 L 12.25 33.141 L 45.194 -0.137 z" stroke-linecap="round"/>
+</g>
+		<g transform="matrix(1 0 0 1 -60.4375 -44.3325)">
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; is-custom-font: none; font-file-url: none; fill: rgb(0,0,0); fill-opacity: 0.13; fill-rule: evenodd; opacity: 1;" transform=" translate(-28.0625, -62.6025)" d="m 46.234 84.032 l -0.063 7.063 l -36.28 -53.563 l 3.36 -3.422 l 32.983 49.922 z" stroke-linecap="round"/>
+</g>
+</g>
+</g>
+</svg>
+

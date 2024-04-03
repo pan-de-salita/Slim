@@ -27,7 +27,7 @@ const Login = () => {
           <LoginHero isLoginText={isLogin} />
           <LoginForm isLoginFields={isLogin} />
           <InsecureContentInstructions />
-          <SignupBottom />
+          <SignupBottom toggleIsLogin={setIsLoginToggle} isLoginText={isLogin} />
         </ LoginMain>
       </div>
       <LoginFooter />
