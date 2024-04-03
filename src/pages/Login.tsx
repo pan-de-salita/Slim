@@ -1,4 +1,4 @@
-import LogoMax from '../assets/logo-max.svg';
+import LoginHeader from '../components/LoginHeader';
 import { TbAlertHexagon } from "react-icons/tb";
 import { TbBrandGithub } from "react-icons/tb";
 import { BiCodeCurly } from "react-icons/bi";
@@ -13,28 +13,14 @@ const Login = () => {
   return (
     <div className='w-screen h-screen flex flex-col items-center justify-between'>
       <div className='w-full flex flex-col items-center'>
-        {/* header */}
-        <header className='w-full h-[126.133px] grid grid-cols-3 items-center pb-10 pt-10'>
-          <div className='col-start-1 col-end-2 bg-red-500'></div>
-          <div className='flex justify-center col-start-2 col-end-3'>
-            <img className='h-[26px] ' src={LogoMax} alt='Slim logo with app name' />
-          </div>
-
-          {/* signup */}
-          <div className='col-start-3 col-end-4 hidden md:flex lg:flex flex-col justify-end items-end pr-[40px] self-end'>
-            <span className='text-sm text-[#616061] '>Don't have an account yet?</span>
-            <br />
-            <a href="" className='text-sm text-[#1a69a6] font-bold'>Create an account</a>
-          </div>
-        </header>
-
+        <LoginHeader />
         {/* main */}
         <main className='w-full max-w-[800px] flex flex-col justify-center items-center'>
 
           {/* hero */}
           <h1 className='text-[43px] md:text-[45px] lg:text-[45px] font-black mb-[10px] text-center text-[#1d1c1d]'>
             Slack, but with
-            <span className='text-[#4a154b]'>&nbsp;Vim&nbsp;</span>
+            <span className='text-[#7db643]'>&nbsp;Vim&nbsp;</span>
             motions
           </h1>
           <div className='mb-[32px] text-[#454245]'>
@@ -54,7 +40,7 @@ const Login = () => {
                 <input {...register('Password')} className='w-full h-[44px] border-2 border-solid border-[#bababa] p-[12px] placeholder-[#1d1c1d90] text-lg rounded-md' type='text' placeholder='Password' required={true} autoComplete='off' />
               </label>
             </div>
-            <button className='w-full h-[44px] bg-[#4a154b] pb-[3px] text-lg rounded-md text-white mb-[20px] hover:bg-[#5b2b5c] transition-all duration-100'>Sign In via Email</button>
+            <button className='w-full h-[44px] bg-[#7db643] pb-[3px] text-lg font-bold rounded-md text-white mb-[20px] hover:bg-[#5b2b5c] transition-all duration-100'>Sign In via Email</button>
           </form>
 
           {/* instructions */}
