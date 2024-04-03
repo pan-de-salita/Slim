@@ -1,6 +1,5 @@
-export type LoginFormData = {
+export interface LoginFormData {
       email: string;
       password: string;
+      password_confirmation?: string;
 };
-
-

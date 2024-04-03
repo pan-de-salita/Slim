@@ -1,10 +1,14 @@
-const LoginHero = () => {
+const LoginHero = ({ isLoginText }: { isLoginText: boolean }) => {
   return (
     <>
       < h1 className='text-[43px] md:text-[45px] lg:text-[45px] font-black mb-[10px] text-center text-[#1d1c1d]' >
-        Slack, but with
-        <span className='text-[#7db643]'>&nbsp;Vim&nbsp;</span>
-        motions
+        <span>
+          {isLoginText ? 'Log in' : 'Sign up'}
+        </span>
+        &nbsp;for Slack
+        <br />
+        with
+        <span className='text-[#7db643]'>&nbsp;Vim motions</span>
       </h1 >
       <div className='mb-[32px] text-[#454245]'>
         <span className='font-bold'>Workspace:&nbsp;</span>

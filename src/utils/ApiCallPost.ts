@@ -1,16 +1,28 @@
-import { SubmitHandler } from 'react-hook-form';
 import { LoginFormData } from './types/ApiCallTypes';
+import { API } from './constants';
+import { SubmitHandler } from 'react-hook-form';
 
-export const onLoginAttempt: SubmitHandler<LoginFormData> = async (
-      { email, password }: { email: string, password: string }
-) => {
+export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: LoginFormData) => {
       try {
-            const data = await fetch('http://206.189.91.54/api/v1/auth/sign_in', {
+            const data = await fetch(`${API}/auth/sign_in`, {
                   method: 'POST',
-                  body: JSON.stringify({
-                        email: email,
-                        password: password,
-                  }),
+                  body: JSON.stringify({ ...loginData }),
+                  headers: {
+                        'Content-Type': 'application/json',
+                  },
+            });
+            const response = await data.json();
+            console.log(response);
+      } catch (error) {
+            console.log(error);
+      }
+};
+
+export const handleSignup: SubmitHandler<LoginFormData> = async (signupData: LoginFormData) => {
+      try {
+            const data = await fetch(`${API}/auth/`, {
+                  method: 'POST',
+                  body: JSON.stringify({ ...signupData }),
                   headers: {
                         'Content-Type': 'application/json',
                   },
