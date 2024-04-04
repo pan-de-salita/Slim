@@ -1,8 +1,8 @@
-import { LoginFormData } from './types/ApiCallTypes';
+import { LoginFormData, LoginSuccess, LoginFail } from './types/ApiCallTypes';
 import { API } from './constants';
 import { SubmitHandler } from 'react-hook-form';
 
-export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: LoginFormData) => {
+export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: LoginFormData): Promise<LoginSuccess | LoginFail | Error> => {
       try {
             const data = await fetch(`${API}/auth/sign_in`, {
                   method: 'POST',
@@ -12,13 +12,13 @@ export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: Login
                   },
             });
             const response = await data.json();
-            console.log(response);
+            return response;
       } catch (error) {
-            console.log(error);
+            return error as Error;
       }
 };
 
-export const handleSignup: SubmitHandler<LoginFormData> = async (signupData: LoginFormData) => {
+export const handleSignup: SubmitHandler<LoginFormData> = async (signupData: LoginFormData): Promise<LoginResult | Error> => {
       try {
             const data = await fetch(`${API}/auth/`, {
                   method: 'POST',
@@ -28,9 +28,9 @@ export const handleSignup: SubmitHandler<LoginFormData> = async (signupData: Log
                   },
             });
             const response = await data.json();
-            console.log(response);
+            return response;
       } catch (error) {
-            console.log(error);
+            return error as Error;
       }
 };
 

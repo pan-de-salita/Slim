@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { handleLogin, handleSignup } from '../utils/ApiCallPost';
-import { LoginFormData } from '../utils/types/ApiCallTypes';
+import { LoginFail, LoginFormData, LoginSuccess, isLoginSuccess } from '../utils/types/apiCallTypes';
 import { loginFields, signupFields } from '../utils/constants';
 import LoginFormFields from './LoginFormFields';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const LoginForm = ({ isLoginFields }: { isLoginFields: boolean }) => {
   const [fields, setFields] = useState(loginFields);
   const { register, handleSubmit, reset } = useForm<LoginFormData>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setFields(() => {
@@ -15,9 +17,18 @@ const LoginForm = ({ isLoginFields }: { isLoginFields: boolean }) => {
     });
   }, [isLoginFields]);
 
-  const submission = (data: LoginFormData) => {
-    isLoginFields ? handleLogin(data) : handleSignup(data);
-    reset();
+  const submission = async (data: LoginFormData) => {
+    if (isLoginFields) {
+      const loginAttempt = await handleLogin(data) as Promise<LoginSuccess | LoginFail | Error>;
+
+      if (isLoginSuccess(loginAttempt)) {
+        navigate('/client');
+      } else {
+        console.log('fail')
+      }
+    } else {
+
+    }
   }
 
   return (
