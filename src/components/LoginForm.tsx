@@ -5,6 +5,7 @@ import { LoginFail, LoginFormData, LoginSuccess, isLoginSuccess } from '../utils
 import { loginFields, signupFields } from '../utils/constants';
 import LoginFormFields from './LoginFormFields';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { toastError, toastSuccess } from '../utils/toasts';
 
 const LoginForm = ({ isLoginFields }: { isLoginFields: boolean }) => {
   const [fields, setFields] = useState(loginFields);
@@ -23,11 +24,13 @@ const LoginForm = ({ isLoginFields }: { isLoginFields: boolean }) => {
 
       if (isLoginSuccess(loginAttempt)) {
         navigate('/client');
+        toastSuccess(`Welcome back, ${loginAttempt.data.uid}.`)
       } else {
-        console.log('fail')
+        toastError('Invalid login credentials.')
       }
     } else {
-
+      const signupAttempt = await handleSignup(data);
+      console.log(signupAttempt);
     }
   }
 

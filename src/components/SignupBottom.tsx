@@ -6,7 +6,6 @@ const SignupBottom = (
       <span className='text-sm text-[#616061]'>
         {isLoginText ? "Don't have an account yet?" : "Already have an account?"}
       </span>
-      <br />
       <button onClick={toggleIsLogin} className='text-sm text-[#1a69a6] font-bold hover:underline'>
         {isLoginText ? 'Create an account' : 'Log in'}
       </button>
