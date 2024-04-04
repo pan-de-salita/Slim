@@ -7,8 +7,7 @@ import { loginFields, signupFields } from '../utils/constants';
 import LoginFormFields from './LoginFormFields';
 import { useNavigate } from 'react-router-dom';
 import { toastError, toastSuccess } from '../utils/toasts';
-import { SignupResponse, isSignupResponse } from '../utils/types/signupAttemptTypes';
-import hasErrors from '../utils/types/hasErrors';
+import { SignupResponse, hasErrors, isSignupResponse } from '../utils/types/signupResponse';
 
 const LoginForm = ({ isLoginFields }: { isLoginFields: boolean }) => {
   const [fields, setFields] = useState(loginFields);

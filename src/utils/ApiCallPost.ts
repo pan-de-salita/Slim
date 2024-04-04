@@ -2,19 +2,28 @@ import { LoginFormData } from '../utils/types/loginFormData';
 import { LoginSuccess, LoginFail } from '../utils/types/loginAttemptTypes';
 import { API } from './constants';
 import { SubmitHandler } from 'react-hook-form';
-import { SignupResponse } from './types/signupAttemptTypes';
+import { SignupResponse } from './types/signupResponse';
 
 export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: LoginFormData): Promise<LoginSuccess | LoginFail | Error> => {
       try {
-            const data = await fetch(`${API}/auth/sign_in`, {
+            const response = await fetch(`${API}/auth/sign_in`, {
                   method: 'POST',
                   body: JSON.stringify({ ...loginData }),
                   headers: {
                         'Content-Type': 'application/json',
                   },
             });
-            const response = await data.json();
-            return response;
+
+            const requestHeadersKeys = ['access-token', 'client', 'expiry', 'uid'];
+            const requestHeaders = requestHeadersKeys.reduce((obj, key) => {
+                  return {
+                        ...obj,
+                        [key]: response.headers.get(key),
+                  };
+            }, {});
+
+            const data = await response.json();
+            return data;
       } catch (error) {
             return error as Error;
       }
@@ -22,15 +31,15 @@ export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: Login
 
 export const handleSignup: SubmitHandler<LoginFormData> = async (signupData: LoginFormData): Promise<SignupResponse | Error> => {
       try {
-            const data = await fetch(`${API}/auth/`, {
+            const response = await fetch(`${API}/auth/`, {
                   method: 'POST',
                   body: JSON.stringify({ ...signupData }),
                   headers: {
                         'Content-Type': 'application/json',
                   },
             });
-            const response = await data.json();
-            return response;
+            const data = await response.json();
+            return data;
       } catch (error) {
             return error as Error;
       }
