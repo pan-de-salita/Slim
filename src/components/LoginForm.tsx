@@ -1,57 +1,64 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { handleLogin, handleSignup } from '../utils/ApiCallPost';
 import { LoginFormData } from '../utils/types/loginFormData';
-import { LoginSuccess, isLoginSuccess, LoginFail } from '../utils/types/loginAttemptTypes';
+import { LoginSuccess, LoginFail, isLoginSuccess, isLoginFail } from '../utils/types/loginAttemptTypes';
 import { loginFields, signupFields } from '../utils/constants';
 import LoginFormFields from './LoginFormFields';
-import { useNavigate } from 'react-router-dom';
-import { toastError, toastSuccess } from '../utils/toasts';
-import { SignupResponse, hasErrors, isSignupResponse } from '../utils/types/signupResponse';
+import { toastError } from '../utils/toasts';
+import { SignupResponse, isSignupResponse } from '../utils/types/signupResponse';
+import { handleLoginAttempt, handleSignupAttempt } from '../utils/handleSubmissionHelpers';
+import signupValidationSchema from '../utils/signupValidationSchema';
 
 const LoginForm = ({ isLoginFields }: { isLoginFields: boolean }) => {
   const [fields, setFields] = useState(loginFields);
-  const { register, handleSubmit, reset } = useForm<LoginFormData>();
   const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    // NOTE: form validation only occurs for signups.
+    // presumably, a user with an account would have
+    // knowledge of what to input to access their account.
+    resolver: yupResolver(signupValidationSchema),
+    mode: 'onBlur',
+  });
 
   useEffect(() => {
     setFields(() => {
       return isLoginFields === true ? loginFields : signupFields;
     });
+    reset();
   }, [isLoginFields]);
 
-  const handleSubmission = async (data: LoginFormData) => {
+  const onSubmit = async (data: LoginFormData) => {
     try {
       const attempt = isLoginFields
         ? await handleLogin(data) as Promise<LoginSuccess | LoginFail | Error>
         : await handleSignup(data) as Promise<SignupResponse | Error>;
 
-      if (isLoginFields) {
-        if (isLoginSuccess(attempt)) {
-          navigate('/client');
-          toastSuccess(`Welcome back, ${attempt.data.uid}.`);
-          reset();
-        } else {
-          toastError('Invalid login credentials.');
-        }
-      } else {
-        if (isSignupResponse(attempt) && attempt.status === 'success') {
-          toastSuccess("You've successfully created an account. Try logging in.");
-          reset();
-        } else if (hasErrors(attempt)) {
-          toastError(`Error: ${attempt.errors.full_messages.join('. ')}.`);
-        }
+      if (isLoginFields && (isLoginSuccess(attempt) || isLoginFail(attempt))) {
+        handleLoginAttempt(attempt, navigate, reset);
+      } else if (isSignupResponse(attempt)) {
+        handleSignupAttempt(attempt, reset);
       }
     } catch (error) {
-      console.error(error);
       toastError('An unexpected error occurred.');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(handleSubmission)}
+    <form onSubmit={handleSubmit(onSubmit)}
       className='w-[90%] md:w-[400px] lg:w-[400px] max-w-[400px] h-full flex flex-col gap-5'>
-      <LoginFormFields formRegister={register} formFields={fields} />
+      {
+        isLoginFields
+          ? <LoginFormFields formRegister={register} formFields={fields} />
+          : <LoginFormFields formRegister={register} formFields={fields} formErrors={errors} />
+      }
       <button
         type='submit'
         className={`w-full h-[44px] pb-[3px] text-lg font-bold rounded-md text-white mb-[20px] ${isLoginFields ? `bg-[#7db643] hover:bg-[#649135]` : `bg-[#45c0f1] hover:bg-[#3799c0]`} transition-all duration-100`}>
