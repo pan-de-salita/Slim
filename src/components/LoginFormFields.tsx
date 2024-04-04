@@ -1,6 +1,6 @@
 import { UseFormRegister } from 'react-hook-form';
 import capitalizeFirstLetter from '../utils/capitalizeFirstLetter';
-import { LoginFormData } from '../utils/types/ApiCallTypes';
+import { LoginFormData } from '../utils/types/loginFormData';
 
 const LoginFormFields = (
   { formRegister, formFields }: { formRegister: UseFormRegister<LoginFormData>, formFields: string[] }

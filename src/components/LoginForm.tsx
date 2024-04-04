@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { handleLogin, handleSignup } from '../utils/ApiCallPost';
-import { LoginFail, LoginFormData, LoginSuccess, isLoginSuccess } from '../utils/types/apiCallTypes';
+import { LoginFormData } from '../utils/types/loginFormData';
+import { LoginSuccess, isLoginSuccess, LoginFail } from '../utils/types/loginAttemptTypes';
 import { loginFields, signupFields } from '../utils/constants';
 import LoginFormFields from './LoginFormFields';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toastError, toastSuccess } from '../utils/toasts';
+import { SignupResponse, isSignupResponse } from '../utils/types/signupAttemptTypes';
+import hasErrors from '../utils/types/hasErrors';
 
 const LoginForm = ({ isLoginFields }: { isLoginFields: boolean }) => {
   const [fields, setFields] = useState(loginFields);
@@ -18,24 +21,36 @@ const LoginForm = ({ isLoginFields }: { isLoginFields: boolean }) => {
     });
   }, [isLoginFields]);
 
-  const submission = async (data: LoginFormData) => {
-    if (isLoginFields) {
-      const loginAttempt = await handleLogin(data) as Promise<LoginSuccess | LoginFail | Error>;
+  const handleSubmission = async (data: LoginFormData) => {
+    try {
+      const attempt = isLoginFields
+        ? await handleLogin(data) as Promise<LoginSuccess | LoginFail | Error>
+        : await handleSignup(data) as Promise<SignupResponse | Error>;
 
-      if (isLoginSuccess(loginAttempt)) {
-        navigate('/client');
-        toastSuccess(`Welcome back, ${loginAttempt.data.uid}.`)
+      if (isLoginFields) {
+        if (isLoginSuccess(attempt)) {
+          navigate('/client');
+          toastSuccess(`Welcome back, ${attempt.data.uid}.`);
+          reset();
+        } else {
+          toastError('Invalid login credentials.');
+        }
       } else {
-        toastError('Invalid login credentials.')
+        if (isSignupResponse(attempt) && attempt.status === 'success') {
+          toastSuccess("You've successfully created an account. Try logging in.");
+          reset();
+        } else if (hasErrors(attempt)) {
+          toastError(`Error: ${attempt.errors.full_messages.join('. ')}.`);
+        }
       }
-    } else {
-      const signupAttempt = await handleSignup(data);
-      console.log(signupAttempt);
+    } catch (error) {
+      console.error(error);
+      toastError('An unexpected error occurred.');
     }
-  }
+  };
 
   return (
-    <form onSubmit={handleSubmit(submission)}
+    <form onSubmit={handleSubmit(handleSubmission)}
       className='w-[90%] md:w-[400px] lg:w-[400px] max-w-[400px] h-full flex flex-col gap-5'>
       <LoginFormFields formRegister={register} formFields={fields} />
       <button
