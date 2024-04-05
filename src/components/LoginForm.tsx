@@ -46,7 +46,7 @@ const LoginForm = (
         handleSignupAttempt(attempt, toggleIsLogin, reset);
       }
     } catch (error) {
-      toastError('An unexpected error occurred.');
+      toastError('An unexpected error occurred. Try again.');
     }
   };
 

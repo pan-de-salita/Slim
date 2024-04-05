@@ -18,9 +18,9 @@ const LoginFormFields = (props: LoginFormFieldsProps) => {
         </label>
         {
           props.formErrors?.[field as keyof LoginFormData]
-          && <div className='pl-1 flex items-center gap-1 '>
+          && <div className='pt-1 pl-1 flex items-center gap-1 '>
             <ImInfo />
-            <p className='font-[400]'>{props.formErrors[field as keyof LoginFormData]?.message}</p>
+            <p className='font-[400] text-sm'>{props.formErrors[field as keyof LoginFormData]?.message}</p>
           </div>
         }
       </div>

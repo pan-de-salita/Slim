@@ -3,7 +3,7 @@ import { LoginSuccess, LoginFail } from '../utils/types/loginAttemptTypes';
 import { API } from './constants';
 import { SubmitHandler } from 'react-hook-form';
 import { SignupResponse } from './types/signupResponse';
-import { fetchRequestHeaders } from './getRequestHeaders';
+import { fetchRequestHeaders } from './requestHeadersFunctions';
 
 export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: LoginFormData): Promise<LoginSuccess | LoginFail | Error> => {
       try {
@@ -14,6 +14,9 @@ export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: Login
                         'Content-Type': 'application/json',
                   },
             });
+
+            fetchRequestHeaders(response);
+
             const data = await response.json();
             return data;
       } catch (error) {

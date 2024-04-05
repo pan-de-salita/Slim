@@ -14,6 +14,5 @@ export const fetchRequestHeaders = (response: Response): RequestHeaders => {
             };
       }, {});
 
-      console.log(requestHeaders);
       return requestHeaders as RequestHeaders;
 };
