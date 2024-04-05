@@ -3,6 +3,7 @@ import { LoginSuccess, LoginFail } from '../utils/types/loginAttemptTypes';
 import { API } from './constants';
 import { SubmitHandler } from 'react-hook-form';
 import { SignupResponse } from './types/signupResponse';
+import { fetchRequestHeaders } from './getRequestHeaders';
 
 export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: LoginFormData): Promise<LoginSuccess | LoginFail | Error> => {
       try {
@@ -13,16 +14,6 @@ export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: Login
                         'Content-Type': 'application/json',
                   },
             });
-
-            const requestHeadersKeys = ['access-token', 'client', 'expiry', 'uid'];
-            const requestHeaders = requestHeadersKeys.reduce((obj, key) => {
-                  return {
-                        ...obj,
-                        [key]: response.headers.get(key),
-                  };
-            }, {});
-            console.log(requestHeaders);
-
             const data = await response.json();
             return data;
       } catch (error) {
@@ -45,4 +36,3 @@ export const handleSignup: SubmitHandler<LoginFormData> = async (signupData: Log
             return error as Error;
       }
 };
-

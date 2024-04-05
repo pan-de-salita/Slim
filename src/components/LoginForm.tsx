@@ -23,7 +23,7 @@ const LoginForm = (
     reset,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: yupResolver(signupValidationSchema),
+    resolver: !isLoginFields ? yupResolver(signupValidationSchema) : undefined,
     mode: 'onBlur',
   });
 

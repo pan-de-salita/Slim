@@ -13,7 +13,7 @@ export const handleLoginAttempt = (
             toastSuccess(`Welcome back, ${attempt.data.uid}!`);
             reset();
       } else {
-            toastError('Invalid login credentials.');
+            toastError('Hm... Are you sure you input the right credentials?');
       }
 };
 

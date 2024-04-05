@@ -16,11 +16,13 @@ const LoginFormFields = (props: LoginFormFieldsProps) => {
             required={true}
             autoComplete='off' />
         </label>
-        {props.formErrors?.[field as keyof LoginFormData]
+        {
+          props.formErrors?.[field as keyof LoginFormData]
           && <div className='pl-1 flex items-center gap-1 '>
             <ImInfo />
             <p className='font-[400]'>{props.formErrors[field as keyof LoginFormData]?.message}</p>
-          </div>}
+          </div>
+        }
       </div>
     );
   })
