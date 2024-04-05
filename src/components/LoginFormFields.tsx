@@ -1,7 +1,7 @@
 import capitalizeFirstLetter from '../utils/capitalizeFirstLetter';
 import { LoginFormData } from '../utils/types/loginFormData';
-import { AiFillInfoCircle } from "react-icons/ai";
 import { LoginFormFieldsProps } from '../utils/types/loginFormFieldsProps';
+import { ImInfo } from "react-icons/im";
 
 const LoginFormFields = (props: LoginFormFieldsProps) => {
   return props.formFields.map((field): JSX.Element => {
@@ -17,8 +17,8 @@ const LoginFormFields = (props: LoginFormFieldsProps) => {
             autoComplete='off' />
         </label>
         {props.formErrors?.[field as keyof LoginFormData]
-          && <div className='pl-1 flex items-center gap-1'>
-            <AiFillInfoCircle />
+          && <div className='pl-1 flex items-center gap-1 '>
+            <ImInfo />
             <p className='font-[400]'>{props.formErrors[field as keyof LoginFormData]?.message}</p>
           </div>}
       </div>

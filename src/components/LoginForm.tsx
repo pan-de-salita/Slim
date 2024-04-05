@@ -11,8 +11,10 @@ import { toastError } from '../utils/toasts';
 import { SignupResponse, isSignupResponse } from '../utils/types/signupResponse';
 import { handleLoginAttempt, handleSignupAttempt } from '../utils/handleSubmissionHelpers';
 import signupValidationSchema from '../utils/signupValidationSchema';
+import LoginButton from './LoginButton';
 
-const LoginForm = ({ isLoginFields }: { isLoginFields: boolean }) => {
+const LoginForm = (
+  { toggleIsLogin, isLoginFields }: { toggleIsLogin: () => void, isLoginFields: boolean }) => {
   const [fields, setFields] = useState(loginFields);
   const navigate = useNavigate();
   const {
@@ -21,9 +23,6 @@ const LoginForm = ({ isLoginFields }: { isLoginFields: boolean }) => {
     reset,
     formState: { errors },
   } = useForm<LoginFormData>({
-    // NOTE: form validation only occurs for signups.
-    // presumably, a user with an account would have
-    // knowledge of what to input to access their account.
     resolver: yupResolver(signupValidationSchema),
     mode: 'onBlur',
   });
@@ -44,7 +43,7 @@ const LoginForm = ({ isLoginFields }: { isLoginFields: boolean }) => {
       if (isLoginFields && (isLoginSuccess(attempt) || isLoginFail(attempt))) {
         handleLoginAttempt(attempt, navigate, reset);
       } else if (isSignupResponse(attempt)) {
-        handleSignupAttempt(attempt, reset);
+        handleSignupAttempt(attempt, toggleIsLogin, reset);
       }
     } catch (error) {
       toastError('An unexpected error occurred.');
@@ -59,11 +58,7 @@ const LoginForm = ({ isLoginFields }: { isLoginFields: boolean }) => {
           ? <LoginFormFields formRegister={register} formFields={fields} />
           : <LoginFormFields formRegister={register} formFields={fields} formErrors={errors} />
       }
-      <button
-        type='submit'
-        className={`w-full h-[44px] pb-[3px] text-lg font-bold rounded-md text-white mb-[20px] ${isLoginFields ? `bg-[#7db643] hover:bg-[#649135]` : `bg-[#45c0f1] hover:bg-[#3799c0]`} transition-all duration-100`}>
-        {isLoginFields ? 'Log in via Email' : 'Sign Up'}
-      </button>
+      <LoginButton onIsLoginFields={isLoginFields} />
     </form >
   );
 };

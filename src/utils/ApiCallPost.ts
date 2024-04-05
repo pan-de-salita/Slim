@@ -14,7 +14,6 @@ export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: Login
                   },
             });
 
-            // TODO: use useContext???
             const requestHeadersKeys = ['access-token', 'client', 'expiry', 'uid'];
             const requestHeaders = requestHeadersKeys.reduce((obj, key) => {
                   return {
@@ -22,6 +21,7 @@ export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: Login
                         [key]: response.headers.get(key),
                   };
             }, {});
+            console.log(requestHeaders);
 
             const data = await response.json();
             return data;

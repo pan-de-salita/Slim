@@ -18,13 +18,13 @@ export const handleLoginAttempt = (
 };
 
 export const handleSignupAttempt = (
-      attempt: SignupResponse, reset: UseFormReset<LoginFormData>
+      attempt: SignupResponse, toggleIsLogin: () => void, reset: UseFormReset<LoginFormData>
 ) => {
       if (attempt.status === 'success') {
             toastSuccess("You've successfully created an account. Try logging in!");
+            toggleIsLogin();
             reset();
       } else if (hasErrors(attempt)) {
             toastError(`Error: ${attempt.errors.full_messages.join('. ')}.`);
       }
 };
-
