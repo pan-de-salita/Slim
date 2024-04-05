@@ -1,6 +1,6 @@
-import capitalizeFirstLetter from '../utils/capitalizeFirstLetter';
-import { LoginFormData } from '../utils/types/loginFormData';
-import { LoginFormFieldsProps } from '../utils/types/loginFormFieldsProps';
+import capitalizeFirstLetter from '../../utils/capitalizeFirstLetter';
+import { LoginFormData } from '../../utils/types/loginFormData';
+import { LoginFormFieldsProps } from '../../utils/types/loginFormFieldsProps';
 import { ImInfo } from "react-icons/im";
 
 const LoginFormFields = (props: LoginFormFieldsProps) => {

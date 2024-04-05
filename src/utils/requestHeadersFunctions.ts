@@ -1,3 +1,4 @@
+import { getFromLocalStorage, storeInLocalStorage } from "./localStorageFunctions";
 import { RequestHeaders } from "./types/RequestHeaders";
 
 export const fetchRequestHeaders = (response: Response) => {
@@ -28,6 +29,6 @@ const storeRequestHeadersInLocalStorage = (requestHeaders: RequestHeaders) => {
       storeInLocalStorage('requestHeaders', requestHeaders);
 }
 
-export const requestHeaders = () => {
-      getFromLocalStorage('requestHeaders');
+export const requestHeaders = (): RequestHeaders => {
+      return getFromLocalStorage('requestHeaders');
 }

@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { handleLogin, handleSignup } from '../utils/ApiCallPost';
-import { LoginFormData } from '../utils/types/loginFormData';
-import { LoginSuccess, LoginFail, isLoginSuccess, isLoginFail } from '../utils/types/loginAttemptTypes';
-import { loginFields, signupFields } from '../utils/constants';
+import { handleLogin, handleSignup } from '../../utils/ApiCallPost';
+import { LoginFormData } from '../../utils/types/loginFormData';
+import { LoginSuccess, LoginFail, isLoginSuccess, isLoginFail } from '../../utils/types/loginAttemptTypes';
+import { loginFields, signupFields } from '../../utils/constants';
 import LoginFormFields from './LoginFormFields';
-import { toastError } from '../utils/toasts';
-import { SignupResponse, isSignupResponse } from '../utils/types/signupResponse';
-import { handleLoginAttempt, handleSignupAttempt } from '../utils/handleSubmissionHelpers';
-import signupValidationSchema from '../utils/signupValidationSchema';
+import { toastError } from '../../utils/toasts';
+import { SignupResponse, isSignupResponse } from '../../utils/types/signupResponse';
+import { handleLoginAttempt, handleSignupAttempt } from '../../utils/handleSubmissionHelpers';
+import signupValidationSchema from '../../utils/signupValidationSchema';
 import LoginButton from './LoginButton';
 
 const LoginForm = (

@@ -14,9 +14,7 @@ export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: Login
                         'Content-Type': 'application/json',
                   },
             });
-
             fetchRequestHeaders(response);
-
             const data = await response.json();
             return data;
       } catch (error) {

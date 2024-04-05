@@ -1,8 +1,8 @@
-const storeInLocalStorage = <T>(key: string, value: T) => {
+export const storeInLocalStorage = <T>(key: string, value: T) => {
       localStorage.setItem(key, JSON.stringify(value));
 }
 
-const getFromLocalStorage = (key: string) => {
+export const getFromLocalStorage = (key: string) => {
       const item = localStorage.getItem(key);
 
       if (item) {
