@@ -20,7 +20,7 @@ const Router = createBrowserRouter([
     path: '/',
     element: (
       <LoggedInRoute>
-        <Login />,
+        <Login />
       </LoggedInRoute>
     ),
   },
@@ -28,7 +28,7 @@ const Router = createBrowserRouter([
     path: '/client',
     element: (
       <PrivateRoute>
-        <Client />,
+        <Client />
       </PrivateRoute>
     ),
     children: [

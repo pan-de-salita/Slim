@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import LoginFooter from '../components/init/LoginFooter';
-import LoginHeader from '../components/init/LoginHeader';
-import LoginMain from '../components/init/LoginMain'
-import SignupTop from '../components/init/SignupTop';
-import Logo from '../components/init/Logo';
-import LoginHero from '../components/init/LoginHero';
-import LoginForm from '../components/init/LoginForm';
-import SignupBottom from '../components/init/SignupBottom';
-import InsecureContentInstructions from '../components/init/InsecureContentInstructions';
+import LoginFooter from '../components/loginComponents/LoginFooter';
+import LoginHeader from '../components/loginComponents/LoginHeader';
+import LoginMain from '../components/loginComponents/LoginMain'
+import SignupTop from '../components/loginComponents/SignupTop';
+import Logo from '../components/loginComponents/Logo';
+import LoginHero from '../components/loginComponents/LoginHero';
+import LoginForm from '../components/loginComponents/LoginForm';
+import SignupBottom from '../components/loginComponents/SignupBottom';
+import InsecureContentInstructions from '../components/loginComponents/InsecureContentInstructions';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
