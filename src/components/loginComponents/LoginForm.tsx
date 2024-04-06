@@ -2,20 +2,21 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { handleLogin, handleSignup } from '../../utils/ApiCallPost';
-import { LoginFormData } from '../../utils/types/loginFormData';
-import { LoginSuccess, LoginFail, isLoginSuccess, isLoginFail } from '../../utils/types/loginAttemptTypes';
-import { loginFields, signupFields } from '../../utils/constants';
+import { LoginFormData } from '../../types/loginFormData';
+import { LoginSuccess, LoginFail, isLoginSuccess, isLoginFail } from '../../types/loginAttemptTypes';
+import { LOGIN_FIELDS, SIGNUP_FIELDS } from '../../constants/formConstants';
 import LoginFormFields from './LoginFormFields';
 import { toastError } from '../../utils/toasts';
-import { SignupResponse, isSignupResponse } from '../../utils/types/signupResponse';
+import { SignupResponse, isSignupResponse } from '../../types/signupResponse';
 import { handleLoginAttempt, handleSignupAttempt } from '../../utils/handleSubmissionHelpers';
 import signupValidationSchema from '../../utils/signupValidationSchema';
 import LoginButton from './LoginButton';
+import { handleLogin, handleSignup } from '../../adapters/fetch/apiCallPost';
+import { useAuth } from '../../contexts/AuthContext';
 
-const LoginForm = (
-  { toggleIsLogin, isLoginFields }: { toggleIsLogin: () => void, isLoginFields: boolean }) => {
-  const [fields, setFields] = useState(loginFields);
+const LoginForm = () => {
+  const { isLogin, toggleIsLogin } = useAuth();
+  const [fields, setFields] = useState(LOGIN_FIELDS);
   const navigate = useNavigate();
   const {
     register,
@@ -23,24 +24,24 @@ const LoginForm = (
     reset,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: !isLoginFields ? yupResolver(signupValidationSchema) : undefined,
+    resolver: !isLogin ? yupResolver(signupValidationSchema) : undefined,
     mode: 'onBlur',
   });
 
   useEffect(() => {
     setFields(() => {
-      return isLoginFields === true ? loginFields : signupFields;
+      return isLogin === true ? LOGIN_FIELDS : SIGNUP_FIELDS;
     });
     reset();
-  }, [isLoginFields]);
+  }, [isLogin]);
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const attempt = isLoginFields
+      const attempt = isLogin
         ? await handleLogin(data) as Promise<LoginSuccess | LoginFail | Error>
         : await handleSignup(data) as Promise<SignupResponse | Error>;
 
-      if (isLoginFields && (isLoginSuccess(attempt) || isLoginFail(attempt))) {
+      if (isLogin && (isLoginSuccess(attempt) || isLoginFail(attempt))) {
         handleLoginAttempt(attempt, navigate, reset);
       } else if (isSignupResponse(attempt)) {
         handleSignupAttempt(attempt, toggleIsLogin, reset);
@@ -52,13 +53,13 @@ const LoginForm = (
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}
-      className='w-[90%] md:w-[400px] lg:w-[400px] max-w-[400px] h-full flex flex-col gap-5'>
+      className='w-[90%] md:w-[400px] lg:w-[400px] max-w-[400px] h-full flex flex-col gap-5' >
       {
-        isLoginFields
+        isLogin
           ? <LoginFormFields formRegister={register} formFields={fields} />
           : <LoginFormFields formRegister={register} formFields={fields} formErrors={errors} />
       }
-      <LoginButton onIsLoginFields={isLoginFields} />
+      <LoginButton onIsLoginFields={isLogin} />
     </form >
   );
 };

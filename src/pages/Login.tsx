@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import LoginFooter from '../components/loginComponents/LoginFooter';
 import LoginHeader from '../components/loginComponents/LoginHeader';
 import LoginMain from '../components/loginComponents/LoginMain'
@@ -10,24 +9,18 @@ import SignupBottom from '../components/loginComponents/SignupBottom';
 import InsecureContentInstructions from '../components/loginComponents/InsecureContentInstructions';
 
 const Login = () => {
-  const [isLogin, setIsLogin] = useState(true);
-
-  const setIsLoginToggle = () => {
-    setIsLogin(prev => !prev);
-  };
-
   return (
     <div className='w-screen h-screen flex flex-col items-center justify-between'>
       <div className='w-full flex flex-col items-center'>
         <LoginHeader>
           <Logo />
-          <SignupTop toggleIsLogin={setIsLoginToggle} isLoginText={isLogin} />
+          <SignupTop />
         </LoginHeader>
         <LoginMain>
-          <LoginHero isLoginText={isLogin} />
-          <LoginForm toggleIsLogin={setIsLoginToggle} isLoginFields={isLogin} />
+          <LoginHero />
+          <LoginForm />
           <InsecureContentInstructions />
-          <SignupBottom toggleIsLogin={setIsLoginToggle} isLoginText={isLogin} />
+          <SignupBottom />
         </ LoginMain>
       </div>
       <LoginFooter />

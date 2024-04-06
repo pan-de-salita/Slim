@@ -1,13 +1,13 @@
-import { LoginFormData } from '../utils/types/loginFormData';
-import { LoginSuccess, LoginFail } from '../utils/types/loginAttemptTypes';
-import { API } from './constants';
+import { LoginFormData } from '../../types/loginFormData';
+import { LoginSuccess, LoginFail } from '../../types/loginAttemptTypes';
 import { SubmitHandler } from 'react-hook-form';
-import { SignupResponse } from './types/signupResponse';
-import { fetchRequestHeaders } from './requestHeadersFunctions';
+import { LOGIN_URL_ENDPOINT, SIGNUP_URL_ENDPOINT } from '../../constants/apiConstants';
+import { SignupResponse } from '../../types/signupResponse';
+import { fetchRequestHeaders } from '../../utils/requestHeadersFunctions';
 
 export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: LoginFormData): Promise<LoginSuccess | LoginFail | Error> => {
       try {
-            const response = await fetch(`${API}/auth/sign_in`, {
+            const response = await fetch(LOGIN_URL_ENDPOINT, {
                   method: 'POST',
                   body: JSON.stringify({ ...loginData }),
                   headers: {
@@ -24,7 +24,7 @@ export const handleLogin: SubmitHandler<LoginFormData> = async (loginData: Login
 
 export const handleSignup: SubmitHandler<LoginFormData> = async (signupData: LoginFormData): Promise<SignupResponse | Error> => {
       try {
-            const response = await fetch(`${API}/auth/`, {
+            const response = await fetch(SIGNUP_URL_ENDPOINT, {
                   method: 'POST',
                   body: JSON.stringify({ ...signupData }),
                   headers: {

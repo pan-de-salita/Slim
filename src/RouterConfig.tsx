@@ -1,27 +1,21 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
-
 import Login from './pages/Login';
 import Client from './pages/Client';
 import { requestHeaders } from './utils/requestHeadersFunctions';
 import { ReactNode } from 'react';
+import { AuthProvider } from './contexts/AuthContext';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
-  const requestHeadersFromStorage = requestHeaders();
-  return requestHeadersFromStorage ? children : <Navigate to='/' replace={true} />;
-};
-
-const LoggedInRoute = ({ children }: { children: ReactNode }) => {
-  const requestHeadersFromStorage = requestHeaders();
-  return requestHeadersFromStorage ? <Navigate to='/client' replace={true} /> : children;
+  return requestHeaders() ? children : <Navigate to='/' replace={true} />;
 };
 
 const Router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <LoggedInRoute>
+      <AuthProvider>
         <Login />
-      </LoggedInRoute>
+      </AuthProvider>
     ),
   },
   {
