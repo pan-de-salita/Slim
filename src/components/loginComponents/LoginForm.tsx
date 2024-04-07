@@ -11,7 +11,7 @@ import { SignupResponse, isSignupResponse } from '../../types/signupResponse';
 import { handleLoginAttempt, handleSignupAttempt } from '../../utils/handleSubmissionHelpers';
 import signupValidationSchema from '../../utils/signupValidationSchema';
 import LoginButton from './LoginButton';
-import { handleLogin, handleSignup } from '../../adapters/fetch/apiCallPost';
+import { handleLogin, handleSignup } from '../../adapters/api/apiCallPost';
 import { useAuth } from '../../contexts/AuthContext';
 
 const LoginForm = () => {
@@ -56,8 +56,13 @@ const LoginForm = () => {
       className='w-[90%] md:w-[400px] lg:w-[400px] max-w-[400px] h-full flex flex-col gap-5' >
       {
         isLogin
-          ? <LoginFormFields formRegister={register} formFields={fields} />
-          : <LoginFormFields formRegister={register} formFields={fields} formErrors={errors} />
+          ? <LoginFormFields
+            formRegister={register}
+            formFields={fields} />
+          : <LoginFormFields
+            formRegister={register}
+            formFields={fields}
+            formErrors={errors} />
       }
       <LoginButton onIsLoginFields={isLogin} />
     </form >

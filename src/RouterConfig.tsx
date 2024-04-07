@@ -1,12 +1,13 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import Login from './pages/Login';
 import Client from './pages/Client';
-import { requestHeaders } from './utils/requestHeadersFunctions';
+import { REQUEST_HEADERS, getRequestHeaders } from './utils/requestHeadersFunctions';
 import { ReactNode } from 'react';
 import { AuthProvider } from './contexts/AuthContext';
+import { handleListAllUsers } from './adapters/api/apiCallGet';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
-  return requestHeaders() ? children : <Navigate to='/' replace={true} />;
+  return REQUEST_HEADERS || getRequestHeaders() ? children : <Navigate to='/' replace={true} />;
 };
 
 const Router = createBrowserRouter([
@@ -25,6 +26,9 @@ const Router = createBrowserRouter([
         <Client />
       </PrivateRoute>
     ),
+    loader: async () => {
+      return handleListAllUsers();
+    },
     children: [
 
     ],

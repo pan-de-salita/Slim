@@ -1,13 +1,10 @@
+import { requestHeadersKeys } from "../constants/apiConstants";
+import { RequestHeaders } from "../types/RequestHeaders";
 import { getFromLocalStorage, storeInLocalStorage } from "./localStorageFunctions";
-import { RequestHeaders } from "./types/RequestHeaders";
 
 export const fetchRequestHeaders = (response: Response) => {
-      const requestHeadersKeys = ['access-token', 'client', 'expiry', 'uid'];
       const requestHeaders = requestHeadersKeys.reduce((obj, key) => {
-            return {
-                  ...obj,
-                  [key]: response.headers.get(key),
-            };
+            return { ...obj, [key]: response.headers.get(key), };
       }, {});
 
       if (isValidRequestHeaders(requestHeaders as RequestHeaders)) {
@@ -29,6 +26,8 @@ const storeRequestHeadersInLocalStorage = (requestHeaders: RequestHeaders) => {
       storeInLocalStorage('requestHeaders', requestHeaders);
 }
 
-export const requestHeaders = (): RequestHeaders => {
+export const getRequestHeaders = (): RequestHeaders => {
       return getFromLocalStorage('requestHeaders');
 }
+
+export const REQUEST_HEADERS = getRequestHeaders();
