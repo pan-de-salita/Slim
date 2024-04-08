@@ -1,21 +1,20 @@
-import { LoginFormData } from '../../types/loginFormData';
-import { SubmitHandler } from 'react-hook-form';
-import { LIST_ALL_USERS_URL_ENDPOINT, SIGNUP_URL_ENDPOINT } from '../../constants/apiConstants';
-import { SignupResponse } from '../../types/signupResponse';
-import { REQUEST_HEADERS } from '../../utils/requestHeadersFunctions';
+import { LIST_ALL_USERS_URL_ENDPOINT } from '../../constants/apiConstants';
+import { User } from '../../types/userType';
+import { getRequestHeaders } from '../../utils/requestHeadersFunctions';
 
-export const handleListAllUsers = async () => {
+export const handleListAllUsers = async (): Promise<User[] | Error | undefined> => {
       try {
-            if (REQUEST_HEADERS) {
+            if (getRequestHeaders()) {
                   const response = await fetch(LIST_ALL_USERS_URL_ENDPOINT, {
                         method: 'GET',
                         headers: {
                               'Content-Type': 'application/json',
-                              ...REQUEST_HEADERS,
+                              ...getRequestHeaders(),
                         },
                   });
 
                   const data = await response.json();
+                  console.log(data)
                   return data;
             }
       } catch (error) {
@@ -23,18 +22,3 @@ export const handleListAllUsers = async () => {
       }
 };
 
-export const handleSignup: SubmitHandler<LoginFormData> = async (signupData: LoginFormData): Promise<SignupResponse | Error> => {
-      try {
-            const response = await fetch(SIGNUP_URL_ENDPOINT, {
-                  method: 'POST',
-                  body: JSON.stringify({ ...signupData }),
-                  headers: {
-                        'Content-Type': 'application/json',
-                  },
-            });
-            const data = await response.json();
-            return data;
-      } catch (error) {
-            return error as Error;
-      }
-};

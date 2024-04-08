@@ -29,5 +29,3 @@ const storeRequestHeadersInLocalStorage = (requestHeaders: RequestHeaders) => {
 export const getRequestHeaders = (): RequestHeaders => {
       return getFromLocalStorage('requestHeaders');
 }
-
-export const REQUEST_HEADERS = getRequestHeaders();

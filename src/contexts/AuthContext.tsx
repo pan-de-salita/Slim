@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import { AuthContextValue } from '../types/AuthContextValue';
 import { Navigate } from 'react-router-dom';
-import { REQUEST_HEADERS, getRequestHeaders } from '../utils/requestHeadersFunctions';
+import { getRequestHeaders } from '../utils/requestHeadersFunctions';
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider value={{ isLogin, toggleIsLogin }}>
-      {REQUEST_HEADERS || getRequestHeaders() ? <Navigate to='/client' replace={true} /> : children}
+      {getRequestHeaders() ? <Navigate to='/client' replace={true} /> : children}
     </AuthContext.Provider>
   );
 }
