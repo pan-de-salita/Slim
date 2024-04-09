@@ -6,3 +6,13 @@
   font-family: 'Lato';
   line-height: 1.5;
 }
+
+@layer utilities {
+ .no-scrollbar::-webkit-scrollbar {
+      display: none;
+ }
+ .no-scrollbar {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+ }
+}

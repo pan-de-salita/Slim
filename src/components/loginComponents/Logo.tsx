@@ -1,4 +1,4 @@
-import SlimLogo from '../../assets/logo.svg';
+import SlimLogo from '../../assets/logo-modified.png';
 
 const Logo = () => {
   return (

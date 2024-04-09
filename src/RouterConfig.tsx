@@ -4,6 +4,7 @@ import Client from './pages/Client';
 import { AuthProvider } from './contexts/AuthContext';
 import { handleListAllUsers } from './adapters/api/apiCallGet';
 import { SearchUsersContextProvider } from './contexts/SearchUsersContext';
+import Home from './pages/Home';
 
 const Router = createBrowserRouter([
   {
@@ -26,7 +27,10 @@ const Router = createBrowserRouter([
       return defer({ allUsers: handleListAllUsers() });
     },
     children: [
-
+      {
+        index: true,
+        element: <Home />
+      }
     ],
   },
 ]);

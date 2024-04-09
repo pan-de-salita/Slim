@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginFormData } from '../../types/loginFormData';
 import { LoginSuccess, LoginFail, isLoginSuccess, isLoginFail } from '../../types/loginAttemptTypes';
-import { LOGIN_FIELDS, SIGNUP_FIELDS } from '../../constants/formConstants';
 import LoginFormFields from './LoginFormFields';
 import { toastError } from '../../utils/toasts';
 import { SignupResponse, isSignupResponse } from '../../types/signupResponse';
@@ -13,6 +12,9 @@ import signupValidationSchema from '../../utils/signupValidationSchema';
 import LoginButton from './LoginButton';
 import { handleLogin, handleSignup } from '../../adapters/api/apiCallPost';
 import { useAuth } from '../../contexts/AuthContext';
+
+const LOGIN_FIELDS = ['email', 'password'];
+const SIGNUP_FIELDS = ['email', 'password', 'password_confirmation'];
 
 const LoginForm = () => {
   const { isLogin, toggleIsLogin } = useAuth();
@@ -24,7 +26,7 @@ const LoginForm = () => {
     reset,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: yupResolver(signupValidationSchema),
+    resolver: isLogin ? yupResolver(signupValidationSchema) : undefined,
     mode: 'onBlur',
   });
 
@@ -54,10 +56,16 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}
       className='w-[90%] md:w-[400px] lg:w-[400px] max-w-[400px] h-full flex flex-col gap-5' >
-      <LoginFormFields
-        formRegister={register}
-        formFields={fields}
-        formErrors={errors} />
+      {
+        isLogin
+          ? <LoginFormFields
+            formRegister={register}
+            formFields={fields} />
+          : <LoginFormFields
+            formRegister={register}
+            formFields={fields}
+            formErrors={errors} />
+      }
       <LoginButton onIsLoginFields={isLogin} />
     </form >
   );

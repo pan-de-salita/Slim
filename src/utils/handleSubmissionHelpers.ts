@@ -6,25 +6,24 @@ import { LoginFormData } from "../types/loginFormData";
 import { SignupResponse, hasErrors } from "../types/signupResponse";
 
 export const handleLoginAttempt = (
-      attempt: LoginSuccess | LoginFail, navigate: NavigateFunction, reset: UseFormReset<LoginFormData>
+    attempt: LoginSuccess | LoginFail, navigate: NavigateFunction, reset: UseFormReset<LoginFormData>
 ) => {
-      if (isLoginSuccess(attempt)) {
-            navigate('/client');
-            toastSuccess(`Welcome back, ${attempt.data.uid}!`);
-            reset();
-      } else {
-            toastError('Hm... Are you sure you input the right credentials?');
-      }
+    if (isLoginSuccess(attempt)) {
+        navigate('/client');
+        reset();
+    } else {
+        toastError('Hm... Are you sure you input the right credentials?');
+    }
 };
 
 export const handleSignupAttempt = (
-      attempt: SignupResponse, toggleIsLogin: () => void, reset: UseFormReset<LoginFormData>
+    attempt: SignupResponse, toggleIsLogin: () => void, reset: UseFormReset<LoginFormData>
 ) => {
-      if (attempt.status === 'success') {
-            toastSuccess("You've successfully created an account. Try logging in!");
-            toggleIsLogin();
-            reset();
-      } else if (hasErrors(attempt)) {
-            toastError(`Error: ${attempt.errors.full_messages.join('. ')}.`);
-      }
+    if (attempt.status === 'success') {
+        toastSuccess("You've successfully created an account. Try logging in!");
+        toggleIsLogin();
+        reset();
+    } else if (hasErrors(attempt)) {
+        toastError(`Error: ${attempt.errors.full_messages.join('. ')}.`);
+    }
 };
