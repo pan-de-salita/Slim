@@ -18,7 +18,7 @@ const Home = () => {
         {/* header */}
         <div className='w-full h-[49px] flex justify-between items-center pt-10 pb-7'>
           <div className='w-full flex flex-col'>
-            <span className='px-[8px] text-[#474748]'>Workspace:</span>
+            <span className='truncate px-[8px] text-[#474748]'>Workspace:</span>
             <h1 className='truncate px-[8px] pb-[3px] text-xl font-bold'>http://206.189.91.54/api/v1</h1>
           </div>
         </div>
@@ -38,7 +38,7 @@ const Home = () => {
           <div className={expandList.channels === true ? `block` : `hidden`}>
             {users.slice(0, 5).map(({ uid }: { uid: string }) => {
               return (
-                <button key={uid} className='w-full h-[28px] flex justify-start items-center gap-2 hover:bg-[#d8d8da] rounded-md outline-0'>
+                <button key={uid} className='w-auto md:w-auto lg:w-full h-[28px] flex justify-between md:justify-start lg:justify-start items-center gap-2 hover:bg-[#d8d8da] rounded-md outline-0'>
                   <div className='w-[26px] h-[26px] flex justify-center items-center'>
                     <BiSolidMessageSquareDetail color='#7db643' />
                   </div>
@@ -58,7 +58,7 @@ const Home = () => {
             })}
             className='w-fit flex justify-start items-center gap-1 hover:bg-[#d8d8da] px-0 py-1 pr-1 rounded-md outline-0'
           >
-            <div className='w-[26px] h-[26px] flex justify-center items-center '>
+            <div className='w-[26px] h-[26px] flex justify-center items-center'>
               <IoMdArrowDropright size={20} className={`${expandList.dms ? `transform rotate-90` : `transform rotate-0`} transition-transform duration-200 ease-in-out`} />
             </div>
             <h3 className='pr-2'>Direct Messages</h3>
@@ -66,7 +66,7 @@ const Home = () => {
           <div className={expandList.dms === true ? `block` : `hidden`}>
             {users.slice(0, 155).map(({ uid }: { uid: string }) => {
               return (
-                <button key={uid} className='w-full h-[28px] flex justify-start items-center gap-2 hover:bg-[#d8d8da] rounded-md outline-0'>
+                <button key={uid} className='w-auto md:w-auto lg:w-full h-[28px] flex justify-between md:justify-start lg:justify-start items-center gap-2 hover:bg-[#d8d8da] rounded-md outline-0'>
                   <div className='w-[26px] h-[26px] flex justify-center items-center'>
                     <BiSolidMessageSquareDetail color='#45c0f1' />
                   </div>

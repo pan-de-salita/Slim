@@ -2,10 +2,12 @@ import { useContext } from "react";
 import { SearchUsersContext } from "../../contexts/SearchUsersContext";
 import { IoSearch } from "react-icons/io5";
 import { HiOutlineLogout } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 const ClientToolbar = () => {
     // const users = useContext(SearchUsersContext);
     // console.log(users)
+    const navigate = useNavigate();
 
     return (
         <div className='w-full h-[40px] bg-[#E8E8E9] grid grid-cols-7 items-center'>
@@ -15,7 +17,12 @@ const ClientToolbar = () => {
                 <IoSearch color='#525252' />
             </button>
             <div className='flex justify-center items-center col-start-8 col-end-9 pr-[14px]'>
-                <button className='h-[28px] w-[28px] rounded-md cursor-pointer hover:bg-[#A4A4A7]'>
+                <button
+                    onClick={() => {
+                        localStorage.removeItem('requestHeaders');
+                        navigate('/');
+                    }}
+                    className='h-[28px] w-[28px] rounded-md cursor-pointer hover:bg-[#A4A4A7]'>
                     <HiOutlineLogout color='#232123' size={21} />
                 </button>
             </div>
