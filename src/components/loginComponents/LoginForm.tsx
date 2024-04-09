@@ -24,7 +24,7 @@ const LoginForm = () => {
     reset,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: !isLogin ? yupResolver(signupValidationSchema) : undefined,
+    resolver: yupResolver(signupValidationSchema),
     mode: 'onBlur',
   });
 
@@ -54,16 +54,10 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}
       className='w-[90%] md:w-[400px] lg:w-[400px] max-w-[400px] h-full flex flex-col gap-5' >
-      {
-        isLogin
-          ? <LoginFormFields
-            formRegister={register}
-            formFields={fields} />
-          : <LoginFormFields
-            formRegister={register}
-            formFields={fields}
-            formErrors={errors} />
-      }
+      <LoginFormFields
+        formRegister={register}
+        formFields={fields}
+        formErrors={errors} />
       <LoginButton onIsLoginFields={isLogin} />
     </form >
   );

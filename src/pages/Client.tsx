@@ -1,26 +1,14 @@
-import { Suspense, useEffect } from "react";
-import { Await, useNavigation, useRouteLoaderData } from "react-router-dom";
-import { User } from "../types/userType";
-import LoadingUsers from "./LoadingUsers";
+import ClientSidebar from "../components/clientComponents/ClientSidebar";
+import ClientToolbar from "../components/clientComponents/ClientToolbar";
 
 const Client = () => {
-  const routeData = useRouteLoaderData('client') as { allUsers: { data: User[] } };
-  const allUsers = routeData.allUsers;
-
   return (
-    <Suspense fallback={<LoadingUsers />}>
-      <Await
-        resolve={allUsers}
-        errorElement={<div>Error loading users!</div>}
-        children={(resolvedUsers) => (
-          <div>
-            {resolvedUsers.data.map((user: User) => (
-              <div key={user.id}>{user.email}</div>
-            ))}
-          </div>
-        )}
-      />
-    </Suspense>
+    <div className='w-screen h-screen flex flex-col'>
+      <ClientToolbar />
+      <div className='h-full flex justify-between'>
+        <ClientSidebar />
+      </div>
+    </div>
   );
 };
 

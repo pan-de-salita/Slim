@@ -13,7 +13,7 @@ export const useAuth = () => {
   }
 
   return context;
-}
+};
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLogin, setIsLoginFields] = useState(true);
@@ -27,4 +27,4 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       {getRequestHeaders() ? <Navigate to='/client' replace={true} /> : children}
     </AuthContext.Provider>
   );
-}
+};
