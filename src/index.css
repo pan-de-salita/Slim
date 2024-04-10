@@ -5,6 +5,7 @@
 :root {
   font-family: 'Lato';
   line-height: 1.5;
+  color: #1d1c1d;
 }
 
 @layer utilities {

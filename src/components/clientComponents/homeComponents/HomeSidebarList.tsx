@@ -24,10 +24,11 @@ const HomeSidebarList = (
                 <div className='w-[26px] h-[26px] flex justify-center items-center'>
                     <IoMdArrowDropright size={20} className={`${isExpandList ? `transform rotate-90` : `transform rotate-0`} transition-transform duration-200 ease-in-out`} />
                 </div>
-                <h3 className='pr-2'>{listType === 'channels' ? 'Channels' : 'DMs'}</h3>
+                <h3 className='pr-2'>{listType === 'channels' ? 'Channels' : 'Direct messages'}</h3>
             </button>
             <div className={isExpandList === true ? `block` : `hidden`}>
-                {list.slice(0, 5).map(({ uid }: { uid: string }) => {
+                {/* TODO: switch user with appropriate list */}
+                {list.slice(0, 10).map(({ uid }: { uid: string }) => {
                     return (
                         <button
                             key={uid}
@@ -37,7 +38,7 @@ const HomeSidebarList = (
                                 <BiSolidMessageSquareDetail color={listType === 'channels' ? '#7db643' : '#45c0f1'} />
                             </div>
                             <span className='truncate'>{uid}</span>
-                            <span className='text-[#8f8d92]'>channel</span>
+                            <span className='text-[#8f8d92]'>{listType === 'channels' ? 'channel' : 'guest'}</span>
                         </button>
                     );
                 })}

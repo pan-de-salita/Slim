@@ -20,12 +20,12 @@ const isValidRequestHeaders = (requestHeaders: RequestHeaders) => {
     }
 
     return result;
-}
+};
 
 const storeRequestHeadersInLocalStorage = (requestHeaders: RequestHeaders) => {
     storeInLocalStorage('requestHeaders', requestHeaders);
-}
+};
 
 export const getRequestHeaders = (): RequestHeaders => {
     return getFromLocalStorage('requestHeaders');
-}
+};
