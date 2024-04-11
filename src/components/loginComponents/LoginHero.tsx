@@ -9,10 +9,10 @@ const LoginHero = () => {
         <span>
           {isLogin ? 'Log in' : 'Sign up'}
         </span>
-        &nbsp;for Slack
+        &nbsp;for Slack with
         <br />
-        with
-        <span className='text-[#7db643]'>&nbsp;Vim motions</span>
+        <span className={`${isLogin ? 'text-[#7db643]' : 'text-[#45c0f1]'}`}>&nbsp;minimal&nbsp;</span>
+        functionality
       </h1>
       <div className='mb-[32px] text-[#454245]'>
         <span className='font-bold'>Workspace:&nbsp;</span>

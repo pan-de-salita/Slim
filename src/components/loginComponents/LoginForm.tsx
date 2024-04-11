@@ -26,7 +26,7 @@ const LoginForm = () => {
     reset,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: isLogin ? yupResolver(signupValidationSchema) : undefined,
+    resolver: !isLogin ? yupResolver(signupValidationSchema) : undefined,
     mode: 'onBlur',
   });
 
@@ -44,7 +44,7 @@ const LoginForm = () => {
         : await handleSignup(data) as Promise<SignupResponse | Error>;
 
       if (isLogin && (isLoginSuccess(attempt) || isLoginFail(attempt))) {
-        handleLoginAttempt(attempt, navigate, reset);
+        handleLoginAttempt(data.email, attempt, navigate, reset);
       } else if (isSignupResponse(attempt)) {
         handleSignupAttempt(attempt, toggleIsLogin, reset);
       }

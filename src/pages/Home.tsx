@@ -9,8 +9,8 @@ import slimBot from '../assets/slim-bot.png';
 import { IoSend } from "react-icons/io5";
 import profilePicture from '../assets/profilePicture.jpeg'
 import { formatDate, formatTime, getMinutes } from "../utils/dateAndTimeFunctions";
-import { getFromLocalStorage } from "../utils/localStorageFunctions";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { defaultSlimbotChatHistory } from "../constants/defaultSlimbotChatHistory";
 
 type FormValue = {
   message: string,
@@ -25,38 +25,7 @@ const Home = () => {
   // TODO: get appropriate users per list
   const users = useContext(SearchUsersContext);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [slimbotChatHistory, setSlimbotChatHistory] = useLocalStorage('slimbotChatHistory', [
-    {
-      date: 'test date 1',
-      messages: [
-        {
-          time: formatTime(new Date()),
-          text: 'this is a loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong text.',
-          isShowDetails: true,
-        },
-        {
-          time: formatTime(new Date()),
-          text: 'a short text',
-          isShowDetails: false,
-        },
-      ],
-    },
-    {
-      date: 'test date 2',
-      messages: [
-        {
-          time: formatTime(new Date()),
-          text: 'another test',
-          isShowDetails: true,
-        },
-        {
-          time: formatTime(new Date()),
-          text: 'this is another loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong text.',
-          isShowDetails: false,
-        },
-      ],
-    }
-  ]);
+  const [slimbotChatHistory, setSlimbotChatHistory] = useLocalStorage('slimbotChatHistory', defaultSlimbotChatHistory);
   const [textAreaContent, setTextAreaContent] = useState('');
   const [currentTime, setCurrentTime] = useState(formatTime(new Date()));
   const [expandList, setExpandList] = useState({
@@ -87,7 +56,7 @@ const Home = () => {
   const messageSlimbot = ({ message }: { message: string }) => {
     const newDate = formatDate(new Date());
     const newTime = formatTime(new Date());
-    const isMoreThanTenMinutes = Math.abs(getMinutes(currentTime) - getMinutes(newTime)) >= 1;
+    const isMoreThanTenMinutes = Math.abs(getMinutes(currentTime) - getMinutes(newTime)) >= 10;
 
     if (isMoreThanTenMinutes) {
       setCurrentTime(newTime);
@@ -127,6 +96,8 @@ const Home = () => {
     });
 
     reset();
+    const textarea = document.querySelector('textarea')!;
+    textarea.style.height = 'auto'; // Reset to auto to allow for dynamic resizing based on content
     setTextAreaContent('');
   };
 
@@ -174,7 +145,7 @@ const Home = () => {
           <div className='px-[20px] w-full pt-5'>
             <h2 className='text-3xl font-black pb-[1rem]'>Hi, Slimbot here!</h2>
             <div className='flex items-start gap-8'>
-              <img className='bg-purple-900 rounded-md w-[48px] h-[48px]' src={slimBot} alt='SlimBot profile picture' />
+              <img className='mt-2 bg-purple-900 rounded-md w-[48px] h-[48px]' src={slimBot} alt='SlimBot profile picture' />
               <div className='flex flex-col justify-start text-lg font-md'>
                 <p className='pb-[1rem]'>You’re here! Hello!</p>
                 <p className='pb-[1rem]'>I am not a human. Just a bot. But I’m programmed to 'feel' happy you're here!</p>
@@ -199,7 +170,7 @@ const Home = () => {
                     return (
                       <div
                         key={text + time + idx}
-                        className={`group hover:bg-[#d8d8da50] px-[20px] flex ${isShowDetails ? 'items-start' : 'items-center'} gap-2 py-[0.1rem]`}
+                        className={`group hover:bg-[#d8d8da50] px-[20px] flex ${isShowDetails ? 'items-start' : 'items-center'} gap-2 py-[0.05rem]`}
                       >
                         {
                           isShowDetails
@@ -229,22 +200,38 @@ const Home = () => {
           <div ref={messagesEndRef} className='h-0' />
         </div>
         {/* input */}
-        <div className='px-[20px] w-full h-[2.5rem] mb-[1.6rem]'>
+        <div className='px-[20px] w-full h-auto mb-[1.6rem]'>
           <form
             onSubmit={handleSubmit(messageSlimbot)}
-            className='h-full px-2 flex justify-between items-center rounded-md border-[1px] border-solid border-[#e3e3e2] focus-within:border-[#bbbbba]'>
+            className='h-full flex flex-col justify-between items-center rounded-lg border-[1px] border-solid border-[#e3e3e2] focus-within:border-[#bbbbba]'>
             <textarea
               {...register('message')}
-              onChange={(e) => setTextAreaContent(e.currentTarget.value)}
+              onChange={(e) => {
+                setTextAreaContent(e.currentTarget.value);
+                e.currentTarget.style.height = 'auto';
+                const maxHeight = window.innerHeight / 4; // Half the screen height
+                if (e.currentTarget.scrollHeight <= maxHeight) {
+                  e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
+                } else {
+                  e.currentTarget.style.height = maxHeight + 'px';
+                }
+              }}
               onKeyDown={(e) => handleEnter(e)}
-              className='w-full h-full p-2 resize-none outline-none placeholder-[#1d1c1d90] no-scrollbar rounded-md ' placeholder='Message Slimbot' spellCheck={false}>
+              className='w-full p-2 resize-none outline-none placeholder-[#1d1c1d90] no-scrollbar rounded-lg' placeholder='Message Slimbot' spellCheck={false} rows={1}>
             </textarea>
-            <button
-              type='submit'
-              className='w-[28px] h-[28px] flex justify-center items-center rounded-md outline-none'
-              disabled={textAreaContent.trim() === '' ? true : false}>
-              <IoSend color={textAreaContent.trim() === '' ? 'gray' : '#007b5b'} />
-            </button>
+            <div className={`w-full flex justify-end items-center gap-2 ${textAreaContent.trim() === '' ? 'bg-gray-100' : 'bg-[#007b5b20]'} rounded-bl-md rounded-br-md`}>
+              {
+                textAreaContent.trim() === ''
+                  ? <div></div>
+                  : <span className='text-xs text-gray-700'>Hit <span className='font-bold'>Enter</span> to send message</span>
+              }
+              <button
+                type='submit'
+                className={`w-[28px] h-[28px] flex justify-center items-center rounded-br-md outline-none ${textAreaContent.trim() === '' ? 'bg-gray-100' : 'bg-[#007b5b]'}`}
+                disabled={textAreaContent.trim() === '' ? true : false}>
+                <IoSend color={textAreaContent.trim() === '' ? 'gray' : 'white'} />
+              </button>
+            </div>
           </form>
         </div>
       </div>

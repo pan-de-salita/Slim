@@ -14,7 +14,7 @@ const ClientSidebar = () => {
                     const IconComponent = sidebarIcons[idx];
                     return (
                         <div key={String(IconComponent)} className='group w-[52px] h-[68px] flex flex-col justify-center items-center text-white cursor-pointer'>
-                            <div className='w-[36px] h-[36px] flex justify-center items-center rounded-md hover:bg-[#649135]'>
+                            <div className='w-[36px] h-[36px] flex justify-center items-center rounded-md group-hover:bg-[#649135]'>
                                 <IconComponent size={20} className='transform group-hover:scale-125 transition-transform duration-300' />
                             </div>
                             <span className='text-xs font-[600]'>{link}</span>

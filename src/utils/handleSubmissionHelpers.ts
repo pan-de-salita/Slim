@@ -4,11 +4,13 @@ import { toastError, toastSuccess } from "./toasts";
 import { UseFormReset } from "react-hook-form";
 import { LoginFormData } from "../types/loginFormData";
 import { SignupResponse, hasErrors } from "../types/signupResponse";
+import { storeInLocalStorage } from "./localStorageFunctions";
 
 export const handleLoginAttempt = (
-    attempt: LoginSuccess | LoginFail, navigate: NavigateFunction, reset: UseFormReset<LoginFormData>
+    user: string, attempt: LoginSuccess | LoginFail, navigate: NavigateFunction, reset: UseFormReset<LoginFormData>
 ) => {
     if (isLoginSuccess(attempt)) {
+        storeInLocalStorage('user', user);
         navigate('/client');
         reset();
     } else {
