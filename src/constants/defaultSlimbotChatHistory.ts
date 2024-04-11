@@ -18,7 +18,7 @@ export const defaultSlimbotChatHistory = [
         date: 'Undefined, February 31st',
         messages: [
             {
-                time: '0o:o0 AM',
+                time: '03:21 AM',
                 text: 'have you noticed the times?',
                 isShowDetails: true,
             },
