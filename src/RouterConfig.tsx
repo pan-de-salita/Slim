@@ -2,7 +2,7 @@ import { createBrowserRouter, defer } from 'react-router-dom';
 import Login from './pages/Login';
 import Client from './pages/Client';
 import { AuthProvider } from './contexts/AuthContext';
-import { handleListAllUsers } from './adapters/api/apiCallGet';
+import { handleListAllChannels, handleListAllUsers } from './adapters/api/apiCallGet';
 import { SearchUsersContextProvider } from './contexts/SearchUsersContext';
 import Home from './pages/Home';
 
@@ -24,13 +24,18 @@ const Router = createBrowserRouter([
     ),
     id: 'client',
     loader: async () => {
-      return defer({ allUsers: handleListAllUsers() });
+      return defer(
+        {
+          allUsers: handleListAllUsers(),
+          allChannels: handleListAllChannels(),
+        }
+      );
     },
     children: [
       {
         index: true,
-        element: <Home />
-      }
+        element: <Home />,
+      },
     ],
   },
 ]);

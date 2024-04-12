@@ -27,6 +27,7 @@ const ClientToolbar = () => {
                     onClick={() => {
                         localStorage.removeItem('requestHeaders');
                         localStorage.removeItem('user');
+                        localStorage.removeItem('id');
                         navigate('/');
                     }}
                     className='h-[28px] w-[28px] flex justify-center items-center rounded-md cursor-pointer hover:bg-[#649135]'>

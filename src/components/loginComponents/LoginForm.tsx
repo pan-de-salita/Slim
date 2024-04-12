@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginFormData } from '../../types/loginFormData';
-import { LoginSuccess, LoginFail, isLoginSuccess, isLoginFail } from '../../types/loginAttemptTypes';
+import { LoginSuccess, LoginFail } from '../../types/loginAttemptTypes';
 import LoginFormFields from './LoginFormFields';
 import { toastError } from '../../utils/toasts';
 import { SignupResponse, isSignupResponse } from '../../types/signupResponse';
@@ -40,13 +40,13 @@ const LoginForm = () => {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const attempt = isLogin
-        ? await handleLogin(data) as Promise<LoginSuccess | LoginFail | Error>
-        : await handleSignup(data) as Promise<SignupResponse | Error>;
+        ? await handleLogin(data)
+        : await handleSignup(data);
 
-      if (isLogin && (isLoginSuccess(attempt) || isLoginFail(attempt))) {
-        handleLoginAttempt(data.email, attempt, navigate, reset);
+      if (isLogin) {
+        handleLoginAttempt(data.email, attempt as LoginSuccess | LoginFail | Error, navigate, reset);
       } else if (isSignupResponse(attempt)) {
-        handleSignupAttempt(attempt, toggleIsLogin, reset);
+        handleSignupAttempt(attempt as SignupResponse | Error, toggleIsLogin, reset);
       }
     } catch (error) {
       toastError('An unexpected error occurred. Try again.');

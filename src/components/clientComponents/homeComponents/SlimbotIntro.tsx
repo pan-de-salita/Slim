@@ -7,9 +7,9 @@ const SlimbotIntro = () => {
             <div className='flex items-start gap-8'>
                 <img className='mt-2 bg-purple-900 rounded-md w-[48px] h-[48px]' src={slimBot} alt='SlimBot profile picture' />
                 <div className='flex flex-col justify-start text-lg font-md'>
-                    <p className='pb-[1rem]'>You’re here! Hello!</p>
-                    <p className='pb-[1rem]'>I am not a human. Just a bot. But I’m programmed to 'feel' happy you're here!</p>
-                    <p className='pb-[1rem]'>Go ahead and send me a message. I will get back to you as soon as I learn how.</p>
+                    <p className='pb-[1rem]'>Beep boop! Hello!</p>
+                    <p className='pb-[1rem]'>If it is your first time here, open a channel with the people you want to message. After, you can speak with the channel members individually or in a group.</p>
+                    <p className='pb-[1rem]'>Got questions? Send me a message and I will get back to you as soon as I learn how.</p>
                 </div>
             </div>
         </div>

@@ -26,7 +26,7 @@ const ChatHistory = (
                                     return (
                                         <div
                                             key={text + time + idx}
-                                            className={`group hover:bg-[#d8d8da50] px-[20px] flex ${isShowDetails ? 'items-start' : 'items-center'} gap-2 py-[0.05rem]`}
+                                            className={`group hover:bg-[#d8d8da50] px-[20px] flex ${isShowDetails ? 'items-start' : 'items-center'} gap-2 py-[0.1rem]`}
                                         >
                                             {
                                                 isShowDetails

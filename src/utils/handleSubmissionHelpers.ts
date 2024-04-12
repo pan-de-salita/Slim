@@ -7,20 +7,26 @@ import { SignupResponse, hasErrors } from "../types/signupResponse";
 import { storeInLocalStorage } from "./localStorageFunctions";
 
 export const handleLoginAttempt = (
-    user: string, attempt: LoginSuccess | LoginFail, navigate: NavigateFunction, reset: UseFormReset<LoginFormData>
+    user: string, attempt: LoginSuccess | LoginFail | Error, navigate: NavigateFunction, reset: UseFormReset<LoginFormData>
 ) => {
     if (isLoginSuccess(attempt)) {
         storeInLocalStorage('user', user);
         navigate('/client');
         reset();
     } else {
+        console.log('wah')
         toastError('Hm... Are you sure you input the right credentials?');
     }
 };
 
 export const handleSignupAttempt = (
-    attempt: SignupResponse, toggleIsLogin: () => void, reset: UseFormReset<LoginFormData>
+    attempt: SignupResponse | Error, toggleIsLogin: () => void, reset: UseFormReset<LoginFormData>
 ) => {
+    if (attempt instanceof Error) {
+        toastError(`Error: ${attempt}`);
+        return;
+    }
+
     if (attempt.status === 'success') {
         toastSuccess("You've successfully created an account. Try logging in!");
         toggleIsLogin();

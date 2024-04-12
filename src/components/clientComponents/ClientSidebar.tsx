@@ -1,12 +1,13 @@
 import { HiHome } from "react-icons/hi2";
 import { LuMessagesSquare } from "react-icons/lu";
 import { GrGroup } from "react-icons/gr";
+import { IoMdAdd } from "react-icons/io";
 import profilePicture from '../../assets/profilePicture.jpeg'
 
 const sidebarLinks = ['Home', 'DMs', 'Channels'];
 const sidebarIcons = [HiHome, LuMessagesSquare, GrGroup];
 
-const ClientSidebar = () => {
+const ClientSidebar = ({ toggleOpenCreateChannelModal }: { toggleOpenCreateChannelModal: () => void }) => {
     return (
         <div className='w-[70px] h-full py-[10px] flex flex-col justify-between items-center'>
             <div className='flex flex-col items-center'>
@@ -22,9 +23,16 @@ const ClientSidebar = () => {
                     );
                 })}
             </div>
-            <div className='relative cursor-pointer'>
-                <img className='h-[40px] w-[40px] rounded-md mb-2 shadow-2xl' src={profilePicture} alt='Placeholder for profile picture' />
-                <div className='absolute bg-[#0ef64d] bottom-1 left-8 right-0 h-[12px] w-[12px] rounded-xl shadow-2xl border-[2px] border-solid border-gray-500'></div>
+            <div className='flex flex-col items-center gap-4'>
+                <button
+                    onClick={toggleOpenCreateChannelModal}
+                    className='w-[36px] h-[36px] flex justify-center items-center rounded-[50px] bg-[#649135]'>
+                    <IoMdAdd size={20} color='white' />
+                </button>
+                <div className='relative cursor-pointer'>
+                    <img className='h-[36px] w-[36px] rounded-md mb-2 shadow-2xl' src={profilePicture} alt='Placeholder for profile picture' />
+                    <div className='absolute bg-[#0ef64d] left-7 bottom-1 h-[12px] w-[12px] rounded-sm shadow-2xl border-[2px] border-solid border-gray-800'></div>
+                </div>
             </div>
         </div>
     );

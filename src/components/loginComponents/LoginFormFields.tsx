@@ -13,7 +13,8 @@ const LoginFormFields = (props: LoginFormFieldsProps) => {
           type={field.toLowerCase().includes('password') ? 'password' : 'text'}
           placeholder={field.split('_').map((word) => capitalizeFirstLetter(word)).join(' ')}
           required={true}
-          autoComplete='off' />
+          autoComplete='off'
+        />
         {
           props.formErrors?.[field as keyof LoginFormData]
           && <div className='pt-1 pl-1 flex items-center gap-1 '>

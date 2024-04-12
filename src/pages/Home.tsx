@@ -18,15 +18,11 @@ interface ChatMessages {
 };
 
 const Home = () => {
-  // TODO: get appropriate users per list
-  const users = useContext(SearchUsersContext);
+  const usersAndChannels = useContext(SearchUsersContext);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [slimbotChatHistory, setSlimbotChatHistory] = useLocalStorage('slimbotChatHistory', defaultSlimbotChatHistory);
   const [messagesToSlimbot, setMessagesToSlimbot] = useState<ChatMessages[]>(slimbotChatHistory);
-  const [expandList, setExpandList] = useState({
-    channels: true,
-    dms: true,
-  });
+  const [expandList, setExpandList] = useState({ channels: true, dms: true, });
   const toggleExpand = (listType: keyof ExpandListValue) => {
     setExpandList((prev) => ({
       ...prev,
@@ -36,9 +32,7 @@ const Home = () => {
 
   useEffect(() => {
     setSlimbotChatHistory(messagesToSlimbot);
-  }, [messagesToSlimbot]);
 
-  useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -50,7 +44,6 @@ const Home = () => {
     for (const message of messagesToSlimbot[messagesToSlimbot.length - 1].messages) {
       if (message.isShowDetails === true) {
         lastIsShowDetailsTime = message.time;
-        break;
       }
     }
 
@@ -58,19 +51,21 @@ const Home = () => {
   }
 
   return (
-    <div className='w-full h-full grid grid-cols-[26%_auto] bg-white rounded-md shadow-2xl mr-1'>
+    <div className='w-full h-full grid grid-cols-[25%_auto] bg-white rounded-md shadow-2xl mr-1'>
       <HomeSidebar>
         <HomeSidebarHeader />
         <HomeSidebarList
           listType={'channels'}
-          list={users}
+          list={usersAndChannels.channels.data}
           isExpandList={expandList.channels}
-          handleExpandList={() => toggleExpand('channels')} />
+          handleExpandList={() => toggleExpand('channels')}
+        />
         <HomeSidebarList
           listType={'dms'}
-          list={users}
+          list={usersAndChannels.users.data}
           isExpandList={expandList.dms}
-          handleExpandList={() => toggleExpand('dms')} />
+          handleExpandList={() => toggleExpand('dms')}
+        />
       </HomeSidebar>
       <ChatView>
         <ChatHeader recipientName={'Slimbot'} />

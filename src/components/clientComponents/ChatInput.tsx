@@ -77,7 +77,7 @@ const ChatInput = (
     };
 
     return (
-        <div className='px-[20px] w-full h-auto mb-[1.6rem]'>
+        <div className='bg-transparent px-[20px] w-full h-auto mb-[1.6rem]'>
             <form
                 onSubmit={handleSubmit(messageSlimbot)}
                 className='h-full flex flex-col justify-between items-center rounded-lg border-[1px] border-solid border-[#e3e3e2] focus-within:border-[#bbbbba]'>
@@ -94,9 +94,9 @@ const ChatInput = (
                         }
                     }}
                     onKeyDown={(e) => handleEnter(e)}
-                    className='w-full p-2 resize-none outline-none placeholder-[#1d1c1d90] no-scrollbar rounded-lg' placeholder='Message Slimbot' spellCheck={false} rows={1}>
+                    className='w-full p-2 resize-none outline-none placeholder-[#1d1c1d90] no-scrollbar rounded-tl-lg rounded-tr-lg' placeholder='Message Slimbot' spellCheck={false} rows={1}>
                 </textarea>
-                <div className={`w-full flex justify-end items-center gap-2 ${textAreaContent.trim() === '' ? 'bg-gray-100' : 'bg-[#007b5b20]'} rounded-bl-lg rounded-br-lg`}>
+                <div className={`p-1 w-full flex justify-end items-center gap-2 bg-[#F9F9F8] rounded-bl-lg rounded-br-lg`}>
                     {
                         textAreaContent.trim() === ''
                             ? <div></div>
@@ -104,7 +104,7 @@ const ChatInput = (
                     }
                     <button
                         type='submit'
-                        className={`w-[28px] h-[28px] flex justify-center items-center rounded-br-md outline-none ${textAreaContent.trim() === '' ? 'bg-gray-100' : 'bg-[#007b5b]'}`}
+                        className={`w-[28px] h-[28px] flex justify-center items-center rounded-md outline-none ${textAreaContent.trim() === '' ? 'bg-[#F9F9F8]' : 'bg-[#007b5b]'}`}
                         disabled={textAreaContent.trim() === '' ? true : false}>
                         <IoSend color={textAreaContent.trim() === '' ? 'gray' : 'white'} />
                     </button>
