@@ -25,7 +25,7 @@ export const SearchUsersContextProvider = ({ children }: { children: React.React
   const allUsers = routeData.allUsers;
   const allChannels = routeData.allChannels;
   const combinedRouteData = useMemo(() => Promise.all([allUsers, allChannels]), [allUsers, allChannels]);
-  const [newChannels, setNewChannels] = useState(null);
+  const [newChannels, setNewChannels] = useState({ data: [] });
 
   const updateChannels = async () => {
     const updatedChannels = await handleListAllChannels();

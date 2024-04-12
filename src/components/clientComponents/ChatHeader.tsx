@@ -3,7 +3,7 @@ import slimBot from '../../assets/slim-bot.png';
 const ChatHeader = ({ recipientName }: { recipientName: string }) => {
     return (
         <>
-            <div className='pl-[20px] pr-[12px] py-[3px] h-[49px] flex justify-between'>
+            <div className='pl-[20px] pr-[12px] py-[0.5rem] h-[49px] flex justify-between'>
                 <div className='flex items-center gap-2'>
                     {
                         recipientName === 'Slimbot'

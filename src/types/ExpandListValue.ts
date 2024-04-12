@@ -1,4 +1,4 @@
 export interface ExpandListValue {
-    channels: boolean,
-    dms: boolean,
+    Channel: boolean,
+    User: boolean,
 };

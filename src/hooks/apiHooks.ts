@@ -4,6 +4,7 @@ import { getRequestHeaders } from "../utils/requestHeadersFunctions";
 import { AddMemberToChannelRequestBody, CreateChannelRequestBody, RetrieveMessagesParams, SendMessageRequestBody } from "../types/apiRequestBodyTypes";
 import { RequestHeaders } from "../types/RequestHeaders";
 import { CreateChannelData } from "../types/apiData";
+import { getFromLocalStorage } from "../utils/localStorageFunctions";
 
 // POST
 export const useCreateChannel = (requestBody: CreateChannelRequestBody | null) => {
@@ -265,3 +266,51 @@ export const useRetrieveMessages = async (params: RetrieveMessagesParams | null)
 	return { data, error, isLoading };
 };
 
+// TODO: fix typing
+export const useFetchAvailableUsers = (usersAndChannels) => {
+	const [availableUsers, setAvailableUsers] = useState([]);
+
+	useEffect(() => {
+		const getAllChannelIds = async () => {
+			try {
+				const allChannelIds = usersAndChannels.channels.data.map((channel) => channel.id);
+				const channelDataPromises = allChannelIds.map(async (channelId) => {
+					const response = await fetch(`${LIST_ALL_CHANNELS_URL_ENDPOINT}/${channelId}`, {
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json',
+							...getRequestHeaders(),
+						},
+					});
+
+					if (!response.ok) {
+						throw new Error('Failed to fetch channel data');
+					}
+
+					return response.json();
+				});
+
+				const channelData = await Promise.all(channelDataPromises);
+				return channelData;
+			} catch (error) {
+				console.error('Failed to get all channel IDs:', error);
+				return [];
+			}
+		};
+
+		const fetchData = async () => {
+			const allChannelInfo = await getAllChannelIds();
+			const allAvailableUserIds = [...new Set(allChannelInfo.map(({ data }) => data.channel_members.map(({ user_id }) => user_id)).flat())];
+			setAvailableUsers(usersAndChannels.users.data.reduce<User[]>((acc, cur) => {
+				if (allAvailableUserIds.includes(cur.id) && cur.uid !== getFromLocalStorage('user')) {
+					return [...acc, cur];
+				}
+				return acc;
+			}, []));
+		};
+
+		fetchData();
+	}, [usersAndChannels]); // Depend on usersAndChannels to ensure the effect runs when it changes
+
+	return availableUsers;
+};

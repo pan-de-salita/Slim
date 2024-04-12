@@ -2,10 +2,19 @@ import { ChatMessages } from "../../types/ChatMessages";
 import { formatDate } from "../../utils/dateAndTimeFunctions";
 import { getFromLocalStorage } from "../../utils/localStorageFunctions";
 import profilePicture from '../../assets/profilePicture.jpeg'
+import { useEffect } from "react";
+
+interface ChatHistoryProps {
+    messages?: ChatMessages[],
+    messagesEndRef: React.RefObject<HTMLDivElement>,
+};
 
 const ChatHistory = (
-    { messages, messagesEndRef }: { messages: ChatMessages[], messagesEndRef: React.RefObject<HTMLDivElement> }
+    { messages, messagesEndRef }: ChatHistoryProps
 ) => {
+    useEffect(() => {
+
+    })
     return (
         <>
             {
