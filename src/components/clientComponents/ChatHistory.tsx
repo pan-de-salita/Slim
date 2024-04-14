@@ -1,26 +1,67 @@
 import { ChatMessages } from "../../types/ChatMessages";
-import { formatDate } from "../../utils/dateAndTimeFunctions";
+import { formatDate, formatTime, getMinutes } from "../../utils/dateAndTimeFunctions";
 import { getFromLocalStorage } from "../../utils/localStorageFunctions";
 import profilePicture from '../../assets/profilePicture.jpeg'
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import { User } from "../../types/userType";
+import { Channel } from "../../types/Channel";
+import { BASE_API_URL } from "../../constants/apiConstants";
+import { getRequestHeaders } from "../../utils/requestHeadersFunctions";
+import { useRetrieveMessages } from "../../hooks/apiHooks";
+import { handleRetrieveMessages } from "../../adapters/api/apiCallGet";
 
 interface ChatHistoryProps {
+    recipient?: User,
     messages?: ChatMessages[],
-    messagesEndRef: React.RefObject<HTMLDivElement>,
+};
+
+interface RetrievedMessage {
+    data: [
+        body: string,
+        created_at: string,
+        id: number,
+        receiver: User,
+        currentSender: User,
+    ],
 };
 
 const ChatHistory = (
-    { messages, messagesEndRef }: ChatHistoryProps
+    { recipient, messages }: ChatHistoryProps
 ) => {
-    useEffect(() => {
 
-    })
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [apiMessages, setApiMessages] = useState([]);
+    const [isRetrieveMessagesAgain, setIsRetrieveMessagesAgain] = useState(false);
+    const messagesToMap = messages || apiMessages;
+
+    const retrieveMessages = async () => {
+        if (recipient) {
+            const retrievedMessages = await handleRetrieveMessages({ id: recipient.id, class: 'User' });
+            console.log(retrievedMessages);
+            setApiMessages(retrievedMessages);
+        }
+    };
+
+    useEffect(() => {
+        retrieveMessages();
+
+        const interval = setInterval(() => {
+            setIsRetrieveMessagesAgain((prev: boolean) => !prev);
+        }, 1000);
+
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        return () => clearInterval(interval);
+    }, [recipient, isRetrieveMessagesAgain]);
+
     return (
         <>
             {
-                messages.map((item: ChatMessages) => {
+                messagesToMap.map((item: ChatMessages) => {
                     return (
-                        <div key={item.date} className='w-full py-[0.5rem] '>
+                        <div key={item.date} className='w-full pb-[0.5rem] '>
                             {
                                 item.date
                                     ? <div className='w-full flex items-center py-1'>
@@ -31,7 +72,7 @@ const ChatHistory = (
                                     : <div></div>
                             }
                             <div>
-                                {item.messages.map(({ time, text, isShowDetails }, idx) => {
+                                {item.messages.map(({ time, text, isShowDetails, currentSender }, idx) => {
                                     return (
                                         <div
                                             key={text + time + idx}
@@ -39,7 +80,13 @@ const ChatHistory = (
                                         >
                                             {
                                                 isShowDetails
-                                                    ? <img className='my-2 h-[36px] w-[36px] rounded-md' src={profilePicture} alt='Placeholder for profile picture' />
+                                                    ?
+                                                    currentSender === getFromLocalStorage('user')
+                                                        ? <img className='my-2 h-[36px] w-[36px] rounded-md' src={profilePicture} alt='Placeholder for profile picture' />
+                                                        : <div className={`my-2 h-[36px] w-[36px] flex justify-center items-center ${currentSender && currentSender.length % 2 === 0 ? 'bg-green-800' : currentSender && currentSender.length % 3 === 0 ? 'bg-red-800' : 'bg-blue-800'} rounded-md w-[24px] h-[24px]`}>
+                                                            <span className='w-[36px] h-auto text-xl leading-tight font-bold text-white text-center'>{currentSender ? currentSender[0].toUpperCase() : ''}</span>
+                                                        </div>
+
                                                     : <div className='h-[36px] w-[36px] flex justify-end items-center'>
                                                         <span className='invisible group-hover:visible text-[0.7rem] text-gray-500 pr-2'>{time.slice(0, 5)}</span>
                                                     </div>
@@ -48,7 +95,7 @@ const ChatHistory = (
                                                 {
                                                     isShowDetails
                                                         ? <div className='flex items-center gap-2'>
-                                                            <span className='text-md font-bold h-content'>{getFromLocalStorage('user')}</span>
+                                                            <span className='text-md font-bold h-content'>{currentSender || getFromLocalStorage('user')}</span>
                                                             <span className='text-xs pt-1 text-gray-600'>{time}</span>
                                                         </div>
                                                         : <div></div>
@@ -63,7 +110,7 @@ const ChatHistory = (
                     );
                 })
             }
-            < div ref={messagesEndRef} className='h-0' />
+            <div ref={messagesEndRef} className='h-0' />
         </>
     );
 };

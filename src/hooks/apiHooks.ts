@@ -5,6 +5,7 @@ import { AddMemberToChannelRequestBody, CreateChannelRequestBody, RetrieveMessag
 import { RequestHeaders } from "../types/RequestHeaders";
 import { CreateChannelData } from "../types/apiData";
 import { getFromLocalStorage } from "../utils/localStorageFunctions";
+import { formatDate, formatTime, getMinutes } from "../utils/dateAndTimeFunctions";
 
 // POST
 export const useCreateChannel = (requestBody: CreateChannelRequestBody | null) => {
@@ -235,11 +236,14 @@ export const useRetrieveMessages = async (params: RetrieveMessagesParams | null)
 	const [data, setData] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 
+	console.log(params)
 	useEffect(() => {
 		if (!params) return;
+		console.log('more' + params)
 
 		const retrieveMessages = async () => {
 			setIsLoading(true);
+			console.log(params)
 			try {
 				const response = await fetch(`${BASE_API_URL}/messages?receiver_id=${params.id}&receiver_class=${params.class}`, {
 					method: 'GET',
@@ -250,8 +254,48 @@ export const useRetrieveMessages = async (params: RetrieveMessagesParams | null)
 				});
 
 				const data = await response.json();
-				setData(data);
-			} catch (errror) {
+
+				if (data.data) {
+					setData(
+						data.data.reduce((acc, cur) => {
+							if (acc.length === 0 || formatDate(new Date(cur.created_at)) !== acc[acc.length - 1].date) {
+								return [
+									...acc,
+									{
+										date: formatDate(new Date(cur.created_at)),
+										messages: [
+											{
+												sender: cur.sender.uid,
+												time: formatTime(new Date(cur.created_at)),
+												text: cur.body,
+												isShowDetails: true,
+												lastIsShowDetails: formatTime(new Date(cur.created_at)),
+											}
+										]
+									}
+								]
+							}
+
+							return [
+								...acc.slice(0, acc.length - 1),
+								{
+									...acc[acc.length - 1],
+									messages: [
+										...acc[acc.length - 1].messages,
+										{
+											sender: cur.sender.uid,
+											time: formatTime(new Date(cur.created_at)),
+											text: cur.body,
+											isShowDetails: Math.abs(getMinutes(acc[acc.length - 1].messages[acc[acc.length - 1].messages.length - 1].lastIsShowDetails) - getMinutes(formatTime(new Date(cur.created_at)))) >= 10,
+											lastIsShowDetails: Math.abs(getMinutes(acc[acc.length - 1].messages[acc[acc.length - 1].messages.length - 1].lastIsShowDetails) - getMinutes(formatTime(new Date(cur.created_at)))) >= 10 ? formatTime(new Date(cur.created_at)) : acc[acc.length - 1].messages[acc[acc.length - 1].messages.length - 1].lastIsShowDetails,
+										}
+									]
+								}
+							]
+						}, [])
+					);
+				}
+			} catch (error) {
 				if (error instanceof Error) {
 					setError(error);
 				}

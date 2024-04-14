@@ -3,14 +3,21 @@ import { formatDate, formatTime, getMinutes } from "../../utils/dateAndTimeFunct
 import { useState } from "react";
 import { ChatMessages } from "../../types/ChatMessages";
 import { IoSend } from "react-icons/io5";
+import { getFromLocalStorage } from "../../utils/localStorageFunctions";
+import { User } from "../../types/userType";
+import { handleSendMessage } from "../../adapters/api/apiCallPost";
 
 type FormValue = {
     message: string,
 };
 
-const ChatInput = (
-    { lastIsShowDetails, handleMessages }: { lastIsShowDetails: string, handleMessages: React.Dispatch<React.SetStateAction<ChatMessages[]>> }
-) => {
+interface ChatInputProps {
+    lastIsShowDetails: string,
+    handleMessages?: React.Dispatch<React.SetStateAction<ChatMessages[]>>,
+    recipient?: User,
+};
+
+const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, }: ChatInputProps) => {
     const [currentIsShowDetailsTime, setCurrentIsShowDetailsTime] = useState(lastIsShowDetails);
     const [textAreaContent, setTextAreaContent] = useState('');
     const {
@@ -21,57 +28,100 @@ const ChatInput = (
     } = useForm<FormValue>();
 
     const messageSlimbot = ({ message }: { message: string }) => {
+        const currentUser = getFromLocalStorage('user');
         const newDate = formatDate(new Date());
         const newTime = formatTime(new Date());
-        const isMoreThanTenMinutes = Math.abs(getMinutes(currentIsShowDetailsTime) - getMinutes(newTime)) >= 10;
+        const isMoreThanTenMinutes = lastIsShowDetails ? Math.abs(getMinutes(currentIsShowDetailsTime) - getMinutes(newTime)) >= 10 : true;
 
         if (isMoreThanTenMinutes) {
             setCurrentIsShowDetailsTime(newTime);
         }
 
-        handleMessages((prev): ChatMessages[] => {
-            if (prev[prev.length - 1].date !== formatDate(new Date())) {
-                return [
-                    ...prev,
-                    {
-                        date: newDate,
-                        messages: [
-                            {
-                                time: newTime,
-                                text: message,
-                                isShowDetails: true
-                            }
-                        ],
-                    },
-                ];
+        handleMessages((prev) => {
+            if (prev.length >= 1) {
+                if (prev[prev.length - 1].date !== formatDate(new Date())) {
+                    return [
+                        ...prev,
+                        {
+                            date: newDate,
+                            messages: [
+                                {
+                                    sender: currentUser,
+                                    time: newTime,
+                                    text: message,
+                                    isShowDetails: true,
+                                    lastIsShowDetails: newDate,
+                                }
+                            ],
+                        },
+                    ];
+                } else {
+                    return [
+                        ...prev.slice(0, prev.length - 1),
+                        {
+                            ...prev[prev.length - 1],
+                            messages: [
+                                ...prev[prev.length - 1].messages,
+                                {
+                                    sender: currentUser,
+                                    time: newTime,
+                                    text: message,
+                                    isShowDetails: !isMoreThanTenMinutes ? false : true,
+                                    lastIsShowDetails: !isMoreThanTenMinutes ? newTime : getMinutes(currentIsShowDetailsTime),
+                                },
+                            ],
+                        },
+                    ];
+                }
             }
 
             return [
-                ...prev.slice(0, prev.length - 1),
                 {
-                    ...prev[prev.length - 1],
+                    date: newDate,
                     messages: [
-                        ...prev[prev.length - 1].messages,
                         {
+                            sender: currentUser,
                             time: newTime,
                             text: message,
-                            isShowDetails: !isMoreThanTenMinutes ? false : true,
+                            isShowDetails: true,
+                            lastIsShowDetails: newTime,
                         },
                     ],
                 },
-            ];
+            ]
         });
 
+        console.log(recipient)
+        console.log('sent to slimbot')
         reset();
         const textarea = document.querySelector('textarea')!;
         textarea.style.height = 'auto';
         setTextAreaContent('');
     };
 
+    const messagePerson = ({ message }: { message: string }) => {
+        handleSendMessage({
+            receiver_id: recipient!.id,
+            receiver_class: 'User',
+            body: message,
+        });
+
+        console.log(`sent to ${recipient}`)
+        reset();
+        const textarea = document.querySelector('textarea')!;
+        textarea.style.height = 'auto';
+        setTextAreaContent('');
+
+    };
+
     const handleEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && textAreaContent.trim() !== '') {
             e.preventDefault();
-            messageSlimbot({ message: e.currentTarget.value });
+            if (recipient) {
+                messagePerson({ message: e.currentTarget.value });
+            } else {
+                messageSlimbot({ message: e.currentTarget.value });
+            }
             setValue('message', '');
         }
     };
@@ -79,8 +129,8 @@ const ChatInput = (
     return (
         <div className='bg-transparent px-[20px] w-full h-auto mb-[1.6rem]'>
             <form
-                onSubmit={handleSubmit(messageSlimbot)}
-                className='h-full flex flex-col justify-between items-center rounded-lg border-[1px] border-solid border-[#e3e3e2] focus-within:border-[#bbbbba]'>
+                onSubmit={handleSubmit(recipient ? messagePerson : messageSlimbot)}
+                className='h-full flex flex-col justify-between items-center rounded-md border-[1px] border-solid border-[#e3e3e2] focus-within:border-[#bbbbba]'>
                 <textarea
                     {...register('message')}
                     onChange={(e) => {
@@ -94,9 +144,9 @@ const ChatInput = (
                         }
                     }}
                     onKeyDown={(e) => handleEnter(e)}
-                    className='w-full p-2 resize-none outline-none placeholder-[#1d1c1d90] no-scrollbar rounded-tl-lg rounded-tr-lg' placeholder='Message Slimbot' spellCheck={false} rows={1}>
+                    className='w-full p-2 resize-none outline-none placeholder-[#1d1c1d90] no-scrollbar rounded-tl-md rounded-tr-md' placeholder='Message Slimbot' spellCheck={false} rows={1}>
                 </textarea>
-                <div className={`p-1 w-full flex justify-end items-center gap-2 bg-[#F9F9F8] rounded-bl-lg rounded-br-lg`}>
+                <div className={`p-1 w-full flex justify-end items-center gap-2 bg-white rounded-bl-md rounded-br-md`}>
                     {
                         textAreaContent.trim() === ''
                             ? <div></div>

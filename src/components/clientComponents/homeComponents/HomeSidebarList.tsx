@@ -37,13 +37,22 @@ const HomeSidebarList = (
                     return (
                         <button
                             key={item.id}
-                            onClick={() => toggleChangeRecipients(item.uid.split('@')[0])}
+                            onClick={() => {
+                                toggleChangeRecipients(item.uid)
+                            }}
                             className='w-auto md:w-auto lg:w-full h-[28px] flex justify-between md:justify-start lg:justify-start items-center gap-2 hover:bg-[#d8d8da] rounded-md outline-0'
                         >
                             <div className='w-[26px] h-[26px] flex justify-center items-center'>
-                                <BiSolidMessageSquareDetail color={listType === 'Channel' ? '#7db643' : '#45c0f1'} />
+                                {
+                                    listType === 'Channel'
+                                        ? <BiSolidMessageSquareDetail color='#7db643' />
+                                        : <div className={`my-2 h-[20px] w-[20px] flex justify-center items-center ${item.uid && item.uid.length % 2 === 0 ? 'bg-green-800' : item.uid && item.uid.length % 3 === 0 ? 'bg-red-800' : 'bg-blue-800'} rounded-md w-[24px] h-[24px]`}>
+                                            <span className='w-full h-auto text-xs leading-tight font-bold text-white text-center'>{item.uid ? item.uid[0].toUpperCase() : ''}</span>
+                                        </div>
+
+                                }
                             </div>
-                            <span className='truncate'>{listType === 'Channel' ? item.name : item.uid.split('@')[0]}</span>
+                            <span className='truncate'>{listType === 'Channel' ? item.name : item.uid}</span>
                             <span className='text-[#8f8d92]'>{listType === 'Channel' ? 'channel' : 'guest'}</span>
                         </button>
                     );

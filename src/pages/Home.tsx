@@ -20,14 +20,11 @@ interface ChatMessages {
 
 const Home = () => {
   const usersAndChannels = useContext(SearchUsersContext);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   const availableUsers = useFetchAvailableUsers(usersAndChannels);
   const [slimbotChatHistory, setSlimbotChatHistory] = useLocalStorage('slimbotChatHistory', defaultSlimbotChatHistory);
-
   const [messagesToSlimbot, setMessagesToSlimbot] = useState<ChatMessages[]>(slimbotChatHistory);
-  const [expandList, setExpandList] = useState({ channels: true, dms: true, });
-  const [isTalkingToSlimbot, setIsTalkingToSlimbot] = useState(true);
-  const [recipients, setRecipients] = useState('Slimbot');
+  const [expandList, setExpandList] = useState({ Channel: true, User: true, });
+  const [recipientsUid, setRecipientsUid] = useState('Slimbot');
 
   const toggleExpand = (listType: keyof ExpandListValue) => {
     setExpandList((prev) => ({
@@ -39,29 +36,25 @@ const Home = () => {
   const getLastIsShowDetails = (): string => {
     let lastIsShowDetailsTime = '';
 
-    for (const message of messagesToSlimbot[messagesToSlimbot.length - 1].messages) {
-      if (message.isShowDetails === true) {
-        lastIsShowDetailsTime = message.time;
+    if (messagesToSlimbot.length >= 1) {
+      for (const message of messagesToSlimbot[messagesToSlimbot.length - 1].messages) {
+        if (message.isShowDetails === true) {
+          lastIsShowDetailsTime = message.time;
+        }
       }
     }
 
     return lastIsShowDetailsTime;
   };
 
-  const talkToSomeoneElse = () => {
-    setIsTalkingToSlimbot(false);
-  };
-
   const changeRecipients = (newRecipients: string) => {
-    setRecipients(newRecipients);
+    setRecipientsUid(newRecipients);
   };
 
   useEffect(() => {
+    console.log(recipientsUid)
     setSlimbotChatHistory(messagesToSlimbot);
 
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
   }, [messagesToSlimbot]);
 
   return (
@@ -71,31 +64,43 @@ const Home = () => {
         <HomeSidebarList
           listType={'Channel'}
           list={usersAndChannels.channels.data || []}
-          isExpandList={expandList.channels}
+          isExpandList={expandList.Channel}
           handleExpandList={() => toggleExpand('Channel')}
           toggleChangeRecipients={changeRecipients}
         />
         <HomeSidebarList
           listType={'User'}
           list={availableUsers || []}
-          isExpandList={expandList.dms}
+          isExpandList={expandList.User}
           handleExpandList={() => toggleExpand('User')}
           toggleChangeRecipients={changeRecipients}
         />
       </HomeSidebar>
       <ChatView>
-        <ChatHeader recipientName={recipients} />
+        <ChatHeader recipientName={recipientsUid} />
         <div className={`w-full flex-grow flex flex-col items-center overflow-y-auto scroll-smooth`}>
           <div className='h-[50rem]' />
-          {recipients === 'Slimbot' ? <SlimbotIntro /> : null}
-          {recipients === 'Slimbot'
-            ? <ChatHistory messages={messagesToSlimbot} messagesEndRef={messagesEndRef} />
-            : <ChatHistory messagesEndRef={messagesEndRef} />
+          {recipientsUid === 'Slimbot' ? <SlimbotIntro /> : null}
+          {recipientsUid === 'Slimbot'
+            ? <ChatHistory
+              messages={messagesToSlimbot}
+            />
+            : <ChatHistory
+              recipient={availableUsers.filter((user) => user.uid === recipientsUid)[0]}
+            />
           }
         </div>
-        <ChatInput
-          lastIsShowDetails={getLastIsShowDetails()}
-          handleMessages={setMessagesToSlimbot} />
+        {
+          recipientsUid === 'Slimbot'
+            ? <ChatInput
+              lastIsShowDetails={getLastIsShowDetails()}
+              handleMessages={setMessagesToSlimbot}
+            />
+            : <ChatInput
+              recipient={availableUsers.filter((user) => user.uid === recipientsUid)[0]}
+              lastIsShowDetails={getLastIsShowDetails()}
+            />
+        }
       </ChatView >
     </div >
   );

@@ -98,10 +98,10 @@ const ModalContainer = (
                                             isMulti
                                             placeholder='Add members'
                                             onInputChange={(value) => {
-                                                value ? setFilteredUsers(users.data.filter((user) => user.uid.split('@')[0].includes(value) && user.uid !== getFromLocalStorage('user'))) : setFilteredUsers([]);
+                                                value ? setFilteredUsers(users.data.filter((user) => user.uid.includes(value) && user.uid !== getFromLocalStorage('user'))) : setFilteredUsers([]);
                                             }}
                                             options={debouncedValue.map(({ id, uid }: { uid: string, id: number }) => {
-                                                return { label: uid.split('@')[0], value: id }
+                                                return { label: uid, value: id }
                                             })}
                                             required={true}
                                             styles={customDropdownStyles}

@@ -23,11 +23,11 @@ const ClientSidebar = ({ toggleOpenCreateChannelModal }: { toggleOpenCreateChann
                     );
                 })}
             </div>
-            <div className='flex flex-col items-center gap-4'>
+            <div className='group flex flex-col items-center gap-4'>
                 <button
                     onClick={toggleOpenCreateChannelModal}
                     className='w-[36px] h-[36px] flex justify-center items-center rounded-[50px] bg-[#649135]'>
-                    <IoMdAdd size={20} color='white' />
+                    <IoMdAdd size={20} color='white' className='transform group-hover:scale-150 transition-transform duration-300' />
                 </button>
                 <div className='relative cursor-pointer'>
                     <img className='h-[36px] w-[36px] rounded-md mb-2 shadow-2xl' src={profilePicture} alt='Placeholder for profile picture' />
