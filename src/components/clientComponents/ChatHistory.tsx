@@ -34,16 +34,24 @@ const ChatHistory = (
     const [isRetrieveMessagesAgain, setIsRetrieveMessagesAgain] = useState(false);
     const messagesToMap = messages || apiMessages;
 
-    const retrieveMessages = async () => {
+    const retrieveMessages = async (fetchType: string) => {
         if (recipient) {
-            const retrievedMessages = await handleRetrieveMessages({ id: recipient.id, class: 'User' });
+            console.log(recipient.id)
+            const retrievedMessages = await handleRetrieveMessages({ id: recipient.id, class: fetchType });
             console.log(retrievedMessages);
             setApiMessages(retrievedMessages);
         }
     };
 
     useEffect(() => {
-        retrieveMessages();
+        console.log('recipient: ' + recipient)
+        if (recipient) {
+            if (recipient.name) {
+                retrieveMessages('Channel');
+            } else {
+                retrieveMessages('User');
+            }
+        }
 
         const interval = setInterval(() => {
             setIsRetrieveMessagesAgain((prev: boolean) => !prev);
@@ -83,7 +91,7 @@ const ChatHistory = (
                                                     ?
                                                     currentSender === getFromLocalStorage('user')
                                                         ? <img className='my-2 h-[36px] w-[36px] rounded-md' src={profilePicture} alt='Placeholder for profile picture' />
-                                                        : <div className={`my-2 h-[36px] w-[36px] flex justify-center items-center ${currentSender && currentSender.length % 2 === 0 ? 'bg-green-800' : currentSender && currentSender.length % 3 === 0 ? 'bg-red-800' : 'bg-blue-800'} rounded-md w-[24px] h-[24px]`}>
+                                                        : <div className={`my-2 h-[36px] w-[36px] flex justify-center items-center bg-green-800 rounded-md `}>
                                                             <span className='w-[36px] h-auto text-xl leading-tight font-bold text-white text-center'>{currentSender ? currentSender[0].toUpperCase() : ''}</span>
                                                         </div>
 

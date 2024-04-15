@@ -57,11 +57,37 @@ export const handleRetrieveMessages = async (params: RetrieveMessagesParams | nu
         });
 
         const data = await response.json();
+        console.log(data)
 
         if (data.data) {
             return formatMessages(data.data);
         }
 
+        console.log(data)
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error)
+        }
+    }
+};
+
+export const handleGetChannelDetails = async (params: number | null) => {
+    if (!params) return;
+    console.log(params)
+
+    try {
+        const response = await fetch(`${BASE_API_URL}/channels/${params}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                ...getRequestHeaders(),
+            },
+        });
+
+        const data = await response.json();
+        console.log(data)
+        return data;
     } catch (error) {
         if (error instanceof Error) {
             console.log(error)

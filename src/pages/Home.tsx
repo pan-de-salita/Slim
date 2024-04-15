@@ -25,6 +25,7 @@ const Home = () => {
   const [messagesToSlimbot, setMessagesToSlimbot] = useState<ChatMessages[]>(slimbotChatHistory);
   const [expandList, setExpandList] = useState({ Channel: true, User: true, });
   const [recipientsUid, setRecipientsUid] = useState('Slimbot');
+  const [recipientsType, setRecipientsType] = useState('Slimbot');
 
   const toggleExpand = (listType: keyof ExpandListValue) => {
     setExpandList((prev) => ({
@@ -48,11 +49,13 @@ const Home = () => {
   };
 
   const changeRecipients = (newRecipients: string) => {
+    console.log(typeof newRecipients)
     setRecipientsUid(newRecipients);
+    setRecipientsType(typeof newRecipients === 'string' ? 'User' : 'Channel');
   };
 
   useEffect(() => {
-    console.log(recipientsUid)
+    console.log(usersAndChannels.channels.data)
     setSlimbotChatHistory(messagesToSlimbot);
 
   }, [messagesToSlimbot]);
@@ -77,16 +80,20 @@ const Home = () => {
         />
       </HomeSidebar>
       <ChatView>
-        <ChatHeader recipientName={recipientsUid} />
+        <ChatHeader
+          recipientType={recipientsType}
+          recipientName={typeof recipientsUid === 'string' ? recipientsUid : usersAndChannels.channels.data.filter((channel) => channel.id === recipientsUid)[0]}
+          availableUsers={usersAndChannels.users.data}
+        />
         <div className={`w-full flex-grow flex flex-col items-center overflow-y-auto scroll-smooth`}>
           <div className='h-[50rem]' />
-          {recipientsUid === 'Slimbot' ? <SlimbotIntro /> : null}
+          <SlimbotIntro recipient={typeof recipientsUid === 'string' ? recipientsUid : usersAndChannels.channels.data.filter((channel) => channel.id === recipientsUid)[0].name} />
           {recipientsUid === 'Slimbot'
-            ? <ChatHistory
-              messages={messagesToSlimbot}
-            />
+            ? <ChatHistory messages={messagesToSlimbot} />
             : <ChatHistory
-              recipient={availableUsers.filter((user) => user.uid === recipientsUid)[0]}
+              recipient={recipientsType === 'User'
+                ? availableUsers.filter((user) => user.uid === recipientsUid)[0]
+                : usersAndChannels.channels.data.filter((channel) => channel.id === recipientsUid)[0]}
             />
           }
         </div>
@@ -97,7 +104,12 @@ const Home = () => {
               handleMessages={setMessagesToSlimbot}
             />
             : <ChatInput
-              recipient={availableUsers.filter((user) => user.uid === recipientsUid)[0]}
+              recipientType={recipientsType}
+              recipient={
+                typeof recipientsUid === 'string'
+                  ? availableUsers.filter((user) => user.uid === recipientsUid)[0]
+                  : usersAndChannels.channels.data.filter((channel) => channel.id === recipientsUid)[0]
+              }
               lastIsShowDetails={getLastIsShowDetails()}
             />
         }

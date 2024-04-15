@@ -14,10 +14,11 @@ type FormValue = {
 interface ChatInputProps {
     lastIsShowDetails: string,
     handleMessages?: React.Dispatch<React.SetStateAction<ChatMessages[]>>,
+    recipientType?: 'string',
     recipient?: User,
 };
 
-const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, }: ChatInputProps) => {
+const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, recipientType }: ChatInputProps) => {
     const [currentIsShowDetailsTime, setCurrentIsShowDetailsTime] = useState(lastIsShowDetails);
     const [textAreaContent, setTextAreaContent] = useState('');
     const {
@@ -46,7 +47,7 @@ const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, }: ChatInputP
                             date: newDate,
                             messages: [
                                 {
-                                    sender: currentUser,
+                                    currentSender: currentUser,
                                     time: newTime,
                                     text: message,
                                     isShowDetails: true,
@@ -63,7 +64,7 @@ const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, }: ChatInputP
                             messages: [
                                 ...prev[prev.length - 1].messages,
                                 {
-                                    sender: currentUser,
+                                    currentSender: currentUser,
                                     time: newTime,
                                     text: message,
                                     isShowDetails: !isMoreThanTenMinutes ? false : true,
@@ -80,7 +81,7 @@ const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, }: ChatInputP
                     date: newDate,
                     messages: [
                         {
-                            sender: currentUser,
+                            currentSender: currentUser,
                             time: newTime,
                             text: message,
                             isShowDetails: true,
@@ -102,7 +103,7 @@ const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, }: ChatInputP
     const messagePerson = ({ message }: { message: string }) => {
         handleSendMessage({
             receiver_id: recipient!.id,
-            receiver_class: 'User',
+            receiver_class: recipientType!,
             body: message,
         });
 
