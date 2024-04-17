@@ -19,7 +19,7 @@ const ClientSidebar = ({ toggleOpenCreateChannelModal }: { toggleOpenCreateChann
                 {sidebarLinks.map((link, idx) => {
                     const IconComponent = sidebarIcons[idx];
                     return (
-                        <a href={sidebarSites[idx]} key={String(IconComponent)} className='group w-[3.25rem] h-[4.25rem] flex flex-col justify-center items-center text-white font-bold cursor-pointer'>
+                        <a href={sidebarSites[idx]} target='_blank' key={String(IconComponent)} className='group w-[3.25rem] h-[4.25rem] flex flex-col justify-center items-center text-white font-bold cursor-pointer'>
                             <div className='w-[2.25rem] h-[2.25rem] flex justify-center items-center rounded-md group-hover:bg-[#649135]'>
                                 <IconComponent size={20} className='transform group-hover:scale-125 transition-transform duration-300' />
                             </div>
