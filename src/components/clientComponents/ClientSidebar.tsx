@@ -1,11 +1,16 @@
-import { HiHome } from "react-icons/hi2";
-import { LuMessagesSquare } from "react-icons/lu";
-import { GrGroup } from "react-icons/gr";
 import { IoMdAdd } from "react-icons/io";
+import { TbBrandGithub } from "react-icons/tb";
+import { BiCodeCurly } from "react-icons/bi";
+import { SiNeovim } from "react-icons/si";
 import profilePicture from '../../assets/profilePicture.jpeg'
 
-const sidebarLinks = ['Home', 'DMs', 'Channels'];
-const sidebarIcons = [HiHome, LuMessagesSquare, GrGroup];
+const sidebarLinks = ['Github', 'Code', 'Neovim'];
+const sidebarIcons = [TbBrandGithub, BiCodeCurly, SiNeovim];
+const sidebarSites = [
+    "https://github.com/pan-de-salita",
+    "https://github.com/pan-de-salita/Slim",
+    "https://neovim.io/",
+];
 
 const ClientSidebar = ({ toggleOpenCreateChannelModal }: { toggleOpenCreateChannelModal: () => void }) => {
     return (
@@ -14,20 +19,22 @@ const ClientSidebar = ({ toggleOpenCreateChannelModal }: { toggleOpenCreateChann
                 {sidebarLinks.map((link, idx) => {
                     const IconComponent = sidebarIcons[idx];
                     return (
-                        <div key={String(IconComponent)} className='group w-[3.25rem] h-[4.25rem] flex flex-col justify-center items-center text-white cursor-pointer'>
+                        <a href={sidebarSites[idx]} key={String(IconComponent)} className='group w-[3.25rem] h-[4.25rem] flex flex-col justify-center items-center text-white font-bold cursor-pointer'>
                             <div className='w-[2.25rem] h-[2.25rem] flex justify-center items-center rounded-md group-hover:bg-[#649135]'>
                                 <IconComponent size={20} className='transform group-hover:scale-125 transition-transform duration-300' />
                             </div>
                             <span className='text-xs font-[600]'>{link}</span>
-                        </div>
+                        </a>
                     );
                 })}
             </div>
             <div className='flex flex-col items-center gap-4'>
                 <button
                     onClick={toggleOpenCreateChannelModal}
-                    className='w-[2.25rem] h-[2.25rem] flex justify-center items-center rounded-[50%] bg-[#649135] transform hover:scale-125 transition-transform duration-300'>
-                    <IoMdAdd size={20} color='white' className='' />
+                    className="group relative w-[2.25rem] h-[2.25rem] flex justify-center items-center rounded-[50%] bg-[#649135]"
+                >
+                    <div className="absolute inset-0 rounded-[50%] bg-[#649135] transform group-hover:scale-125 transition-transform duration-300"></div>
+                    <IoMdAdd size={20} color="white" className="relative" />
                 </button>
                 <div className='relative cursor-pointer'>
                     <img className='h-[2.25rem] w-[2.25rem] rounded-md mb-2 shadow-2xl' src={profilePicture} alt='Placeholder for profile picture' />

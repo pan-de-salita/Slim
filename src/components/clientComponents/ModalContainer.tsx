@@ -68,7 +68,7 @@ const ModalContainer = (
                             <h1 className='text-2xl font-black'>Create a channel</h1>
                             <button
                                 onClick={toggleCloseCreateChannelModal}
-                                className='w-[2.25rem] h-[2.25rem] flex justify-center items-center rounded-md hover:bg-[#F9F9F8]'>
+                                className='w-[2.25rem] h-[2.25rem] flex justify-center items-center rounded-md hover:bg-gray-200'>
                                 <IoMdClose size={24} color='#606060' />
                             </button>
                         </div>
@@ -116,7 +116,7 @@ const ModalContainer = (
                             <div className='w-full pt-[0.938rem] pb-[1.25rem] flex justify-end items-center gap-3 font-bold'>
                                 <button
                                     onClick={toggleCloseCreateChannelModal}
-                                    className='w-[5rem] h-[2.25rem] border-[0.063rem] border-solid border-gray-300 rounded-md hover:bg-gray-100'>Cancel</button>
+                                    className='w-[5rem] h-[2.25rem] border-[0.063rem] border-solid border-gray-300 rounded-md hover:bg-gray-200'>Cancel</button>
                                 <button
                                     type='submit'
                                     className={`w-[5rem] h-[2.25rem] border-[0.063rem] rounded-md ${channelFormContent.channelName && channelFormContent.channelMembers.length >= 1 ? 'bg-[#007b5b] text-white' : 'text-gray-500 bg-gray-200'}`}
