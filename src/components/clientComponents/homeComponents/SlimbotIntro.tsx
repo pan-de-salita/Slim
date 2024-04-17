@@ -2,7 +2,7 @@ import slimBot from '../../../assets/slim-bot.png';
 
 const SlimbotIntro = ({ recipient }: { recipient: string }) => {
     return (
-        <div className='px-[20px] w-full pt-5'>
+        <div className='px-[1.25rem] w-full pt-5'>
             {
                 recipient === 'Slimbot'
                     ? <h2 className='text-3xl font-black pb-[1rem]'>Hi, Slimbot here!</h2>
@@ -11,9 +11,9 @@ const SlimbotIntro = ({ recipient }: { recipient: string }) => {
             <div className='flex items-start gap-8'>
                 {
                     recipient === "Slimbot"
-                        ? <img className='mt-2 bg-purple-900 rounded-md w-[48px] h-[48px]' src={slimBot} alt='SlimBot profile picture' />
-                        : <div className={`my-2 h-[48px] w-[48px] flex justify-center items-center ${recipient && recipient.length % 2 === 0 ? 'bg-green-800' : recipient && recipient.length % 3 === 0 ? 'bg-red-800' : 'bg-blue-800'} rounded-md w-[24px] h-[24px]`}>
-                            <span className='w-[48px] h-auto text-xl leading-tight font-bold text-white text-center'>{recipient ? recipient[0].toUpperCase() : ''}</span>
+                        ? <img className='mt-2 bg-purple-900 rounded-md w-[3rem] h-[3rem]' src={slimBot} alt='SlimBot profile picture' />
+                        : <div className={`my-2 h-[3rem] w-[3rem] flex justify-center items-center ${recipient && recipient.length % 2 === 0 ? 'bg-green-800' : recipient && recipient.length % 3 === 0 ? 'bg-red-800' : 'bg-blue-800'} rounded-md w-[3rem] h-[3rem]`}>
+                            <span className='w-[3rem] h-auto text-xl leading-tight font-bold text-white text-center'>{recipient ? recipient[0].toUpperCase() : ''}</span>
                         </div>
                 }
                 {
@@ -25,8 +25,7 @@ const SlimbotIntro = ({ recipient }: { recipient: string }) => {
                         </div>
                         : <div className='flex flex-col justify-start text-lg font-md'>
                             <p className='pb-[1rem]'>You added {recipient}!</p>
-                            <p className='pb-[1rem]'>This is a private conversation. Say Hello!</p>
-
+                            <p className='pb-[1rem]'>This is a private conversation. Say hello!</p>
                         </div>
                 }
             </div>

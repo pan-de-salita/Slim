@@ -32,7 +32,7 @@ const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, recipientType
         const currentUser = getFromLocalStorage('user');
         const newDate = formatDate(new Date());
         const newTime = formatTime(new Date());
-        const isMoreThanTenMinutes = lastIsShowDetails ? Math.abs(getMinutes(currentIsShowDetailsTime) - getMinutes(newTime)) >= 10 : true;
+        const isMoreThanTenMinutes = lastIsShowDetails ? Math.abs(getMinutes(currentIsShowDetailsTime) - getMinutes(newTime)) >= 1 : true;
 
         if (isMoreThanTenMinutes) {
             setCurrentIsShowDetailsTime(newTime);
@@ -128,10 +128,10 @@ const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, recipientType
     };
 
     return (
-        <div className='bg-transparent px-[20px] w-full h-auto mb-[1.6rem]'>
+        <div className='bg-transparent px-[1.25rem] w-full h-auto mb-[1.6rem]'>
             <form
                 onSubmit={handleSubmit(recipient ? messagePerson : messageSlimbot)}
-                className='h-full flex flex-col justify-between items-center rounded-md border-[1px] border-solid border-[#e3e3e2] focus-within:border-[#bbbbba]'>
+                className='h-full flex flex-col justify-between items-center rounded-md border-[0.063rem] border-solid border-[#e3e3e2] focus-within:border-[#bbbbba]'>
                 <textarea
                     {...register('message')}
                     onChange={(e) => {
@@ -155,7 +155,7 @@ const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, recipientType
                     }
                     <button
                         type='submit'
-                        className={`w-[28px] h-[28px] flex justify-center items-center rounded-md outline-none ${textAreaContent.trim() === '' ? 'bg-[#F9F9F8]' : 'bg-[#007b5b]'}`}
+                        className={`w-[1.75rem] h-[1.75rem] flex justify-center items-center rounded-md outline-none ${textAreaContent.trim() === '' ? 'bg-[#F9F9F8]' : 'bg-[#007b5b]'}`}
                         disabled={textAreaContent.trim() === '' ? true : false}>
                         <IoSend color={textAreaContent.trim() === '' ? 'gray' : 'white'} />
                     </button>

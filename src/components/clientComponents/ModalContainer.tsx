@@ -64,24 +64,24 @@ const ModalContainer = (
             {isCreateChannel
                 ? <div className='absolute w-screen h-screen bg-[#0009] left-0 top-0 flex justify-center items-center'>
                     <div className='w-[32.5rem] h-auto flex flex-col items-center rounded-lg bg-white shadow-2xl'>
-                        <div className='flex justify-between items-center w-full h-[4rem] px-[24px] pt-[32px] pb-[11px] '>
+                        <div className='flex justify-between items-center w-full h-[4rem] px-[1.5rem] pt-[2rem] pb-[0.688rem] '>
                             <h1 className='text-2xl font-black'>Create a channel</h1>
                             <button
                                 onClick={toggleCloseCreateChannelModal}
-                                className='w-[36px] h-[36px] flex justify-center items-center rounded-md hover:bg-[#F9F9F8]'>
+                                className='w-[2.25rem] h-[2.25rem] flex justify-center items-center rounded-md hover:bg-[#F9F9F8]'>
                                 <IoMdClose size={24} color='#606060' />
                             </button>
                         </div>
-                        <div className='px-[24px] py-[11px]'>
+                        <div className='px-[1.5rem] py-[0.688rem]'>
                             <p className='text-[#606060]'>Channels are where your team communicates. They're best when organized around a topic — <span className='font-bold'>FrontendDev</span>, for example.</p>
                         </div>
                         <form
                             onSubmit={handleSubmit(createChannel)}
-                            className='px-[24px] py-[11px] w-full flex flex-col items-center gap-5'
+                            className='px-[1.5rem] py-[0.688rem] w-full flex flex-col items-center gap-5'
                         >
                             <input
                                 {...register('channelName')}
-                                className='w-full h-[44px] border-[1px] border-solid border-[#bababa] p-[12px] placeholder-[#1d1c1d90] text-lg rounded-md'
+                                className='w-full h-[2.75rem] border-[0.063rem] border-solid border-[#bababa] p-[0.75rem] placeholder-[#1d1c1d90] text-lg rounded-md'
                                 type='text'
                                 placeholder='Name your channel'
                                 required={true}
@@ -113,13 +113,13 @@ const ModalContainer = (
                                     )}
                                 />
                             </div>
-                            <div className='w-full pt-[15px] pb-[20px] flex justify-end items-center gap-3 font-bold'>
+                            <div className='w-full pt-[0.938rem] pb-[1.25rem] flex justify-end items-center gap-3 font-bold'>
                                 <button
                                     onClick={toggleCloseCreateChannelModal}
-                                    className='w-[5rem] h-[2.25rem] border-[1px] border-solid border-gray-300 rounded-md hover:bg-gray-100'>Cancel</button>
+                                    className='w-[5rem] h-[2.25rem] border-[0.063rem] border-solid border-gray-300 rounded-md hover:bg-gray-100'>Cancel</button>
                                 <button
                                     type='submit'
-                                    className={`w-[5rem] h-[2.25rem] border-[1px] rounded-md ${channelFormContent.channelName && channelFormContent.channelMembers.length >= 1 ? 'bg-[#007b5b] text-white' : 'text-gray-500 bg-gray-200'}`}
+                                    className={`w-[5rem] h-[2.25rem] border-[0.063rem] rounded-md ${channelFormContent.channelName && channelFormContent.channelMembers.length >= 1 ? 'bg-[#007b5b] text-white' : 'text-gray-500 bg-gray-200'}`}
                                     disabled={channelFormContent.channelName && channelFormContent.channelMembers.length >= 1 ? false : true}
                                 >
                                     Create

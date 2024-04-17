@@ -9,7 +9,7 @@ const LoginFormFields = (props: LoginFormFieldsProps) => {
       <div className='w-full' key={field}>
         <input
           {...props.formRegister(field as keyof LoginFormData)}
-          className='w-full h-[44px] border-2 border-solid border-[#bababa] p-[12px] placeholder-[#1d1c1d90] text-lg rounded-md'
+          className='w-full h-[2.75rem] border-2 border-solid border-[#bababa] p-[0.75rem] placeholder-[#1d1c1d90] text-lg rounded-md'
           type={field.toLowerCase().includes('password') ? 'password' : 'text'}
           placeholder={field.split('_').map((word) => capitalizeFirstLetter(word)).join(' ')}
           required={true}

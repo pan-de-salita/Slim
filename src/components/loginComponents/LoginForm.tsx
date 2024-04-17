@@ -55,7 +55,7 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}
-      className='w-[90%] md:w-[400px] lg:w-[400px] max-w-[400px] h-full flex flex-col gap-5' >
+      className='w-[90%] md:w-[25rem] lg:w-[25rem] max-w-[25rem] h-full flex flex-col gap-5' >
       {
         isLogin
           ? <LoginFormFields

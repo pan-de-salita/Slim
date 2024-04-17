@@ -22,11 +22,9 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
     const [channelMembers, setChannelMembers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
     const [channelFormContent, setChannelFormContent] = useState<ChannelFormContent>({ channelName: '', channelMembers: [] });
-    const [isNewMemberAdded, setIsNewMemberAdded] = useState(false);
     const [debouncedValue] = useDebounce(filteredUsers, 300);
     const {
         control,
-        register,
         handleSubmit,
         reset,
     } = useForm({
@@ -37,17 +35,17 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
         if (recipientType === 'Channel') {
             const channelDetails = await handleGetChannelDetails(recipientName.id)
             const memberIds = channelDetails.data.channel_members.map((member) => member.user_id);
-            const test = availableUsers.reduce((acc, cur) => {
+            const members = availableUsers.reduce((acc, cur) => {
                 if (memberIds.includes(cur.id)) {
                     return [...acc, cur];
                 }
 
                 return acc;
             }, []);
-            console.log(test)
-            setChannelMembers(test);
+
+            setChannelMembers(members);
         }
-    }
+    };
 
     const addNewMemberToChannel = (data: FieldValues) => {
         const newMember = data.addChannelMembers.value;
@@ -67,6 +65,7 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
                 setChannelMembers(data.data.channel_members);
             } catch (error) {
                 if (error instanceof Error) {
+                    console.log(error);
                 }
             }
         };
@@ -80,16 +79,16 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
 
     useEffect(() => {
         getChannelDetails();
-    }, [recipientName, recipientType, channelMembers])
+    }, [recipientName, recipientType])
 
     return (
         <>
-            <div className='pl-[20px] pr-[12px] py-[0.5rem] min-h-[49px] flex justify-between'>
+            <div className='pl-[1.25rem] pr-[0.75rem] py-[0.5rem] min-h-[3.063rem] flex justify-between'>
                 <div className='flex items-center gap-2'>
                     {
                         recipientName === 'Slimbot'
-                            ? <img className='bg-purple-900 rounded-md w-[24px] h-[24px]' src={slimBot} alt='SlimBot profile picture' />
-                            : <div className={`flex justify-center items-center ${recipientType === 'User' ? 'bg-green-800' : 'bg-blue-800'} rounded-md w-[24px] h-[24px]`}>
+                            ? <img className='bg-purple-900 rounded-md w-[1.5rem] h-[1.5rem]' src={slimBot} alt='SlimBot profile picture' />
+                            : <div className={`flex justify-center items-center ${recipientType === 'User' ? 'bg-green-800' : 'bg-blue-800'} rounded-md w-[1.5rem] h-[1.5rem]`}>
                                 <span className='w-auto h-auto text-md leading-tight font-bold text-white text-center'>{recipientType === 'User' ? recipientName[0].toUpperCase() : recipientName.name[0].toUpperCase()}</span>
                             </div>
                     }
@@ -99,7 +98,7 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
             {
                 recipientType === 'Channel'
                     ?
-                    <div className='pl-[20px] pr-[12px] pb-[1rem]'>
+                    <div className='pl-[1.25rem] pr-[0.75rem] pb-[1rem]'>
                         <div className='pb-[0.5rem] h-auto flex items-center flex-wrap gap-2'>
                             <span>Members:</span>
                             {channelMembers.map((member) => {
@@ -131,7 +130,7 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
                                     )}
                                 />
                             </ div>
-                            <button type='submit' className='w-[20px] h-full'>
+                            <button type='submit' className='w-[1.25rem] h-full'>
                                 <IoMdAdd />
                             </button>
                         </form>
@@ -139,7 +138,7 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
                     </div>
                     : undefined
             }
-            <div className='w-full border-b-[1px] border-solid border-[#e3e3e2] b-t-0 b-l-0 b-r-0'></div>
+            <div className='w-full border-b-[0.063rem] border-solid border-[#e3e3e2] b-t-0 b-l-0 b-r-0'></div>
         </>
     );
 };

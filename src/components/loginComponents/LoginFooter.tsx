@@ -4,7 +4,7 @@ import { SiNeovim } from "react-icons/si";
 
 const LoginFooter = () => {
   return (
-    <footer className='invisible md:visible lg:visible w-full h-[90px] self-end flex items-center'>
+    <footer className='invisible md:visible lg:visible w-full h-[5.625rem] self-end flex items-center'>
       <ul className='w-full flex justify-center items-center gap-5 text-[#6f6f6f]'>
         <li>
           <a href="https://github.com/pan-de-salita" target='_blank' className='flex items-center gap-1 hover:text-[#1a69a6] hover:underline'>

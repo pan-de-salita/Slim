@@ -32,12 +32,12 @@ const LoadingUsersMessage = () => {
     return (
         <div className='flex justify-center'>
             <div>
-                <span className='text-[35px] md:text-[38px] lg:text-[38px] font-black mb-[10px] text-center text-[#1d1c1d] pt-4'>
+                <span className='text-[2.188rem] md:text-[2.375rem] lg:text-[2.375rem] font-black mb-[0.625rem] text-center text-[#1d1c1d] pt-4'>
                     Loading your workspace
                 </span>
             </div>
             <div className='w-[3rem]'>
-                <span className='text-[35px] md:text-[38px] lg:text-[38px] font-black mb-[10px] text-center text-[#1d1c1d] pt-4'>{dots}</span>
+                <span className='text-[2.188rem] md:text-[2.375rem] lg:text-[2.375rem] font-black mb-[0.625rem] text-center text-[#1d1c1d] pt-4'>{dots}</span>
             </div>
         </div>
     );
