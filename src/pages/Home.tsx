@@ -81,7 +81,7 @@ const Home = () => {
           availableUsers={usersAndChannels.users.data}
         />
         <div className={`w-full flex-grow flex flex-col items-center overflow-y-auto scroll-smooth`}>
-          <div className='h-[28.5rem]' />
+          <div className='flex-grow' />
           <SlimbotIntro
             recipientsType={recipientsType}
             recipient={typeof recipientsUid === 'string' ? recipientsUid : usersAndChannels.channels.data.filter((channel) => channel.id === recipientsUid)[0].name}
