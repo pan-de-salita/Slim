@@ -1,24 +1,15 @@
 import { ChatMessages } from "../../types/ChatMessages";
-import { formatDate, formatTime, getMinutes } from "../../utils/dateAndTimeFunctions";
+import { formatDate } from "../../utils/dateAndTimeFunctions";
 import { getFromLocalStorage } from "../../utils/localStorageFunctions";
 import profilePicture from '../../assets/profilePicture.jpeg'
 import { useEffect, useRef, useState } from "react";
 import { User } from "../../types/userType";
 import { handleRetrieveMessages } from "../../adapters/api/apiCallGet";
+import { Channel } from "../../types/Channel";
 
 interface ChatHistoryProps {
-    recipient?: User,
+    recipient?: User | Channel,
     messages?: ChatMessages[],
-};
-
-interface RetrievedMessage {
-    data: [
-        body: string,
-        created_at: string,
-        id: number,
-        receiver: User,
-        currentSender: User,
-    ],
 };
 
 const ChatHistory = (
@@ -26,21 +17,20 @@ const ChatHistory = (
 ) => {
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const [apiMessages, setApiMessages] = useState([]);
+    const [apiMessages, setApiMessages] = useState<ChatMessages[]>([]);
     const [isRetrieveMessagesAgain, setIsRetrieveMessagesAgain] = useState(false);
     const messagesToMap = messages || apiMessages;
 
-    const retrieveMessages = async (fetchType: string) => {
+    const retrieveMessages = async (fetchType: 'User' | 'Channel') => {
         if (recipient) {
-            console.log(recipient.id)
             const retrievedMessages = await handleRetrieveMessages({ id: recipient.id, class: fetchType });
-            console.log(retrievedMessages);
-            setApiMessages(retrievedMessages);
+            if (retrievedMessages) {
+                setApiMessages(retrievedMessages);
+            }
         }
     };
 
     useEffect(() => {
-        console.log('recipient: ' + recipient)
         if (recipient) {
             if (recipient.name) {
                 retrieveMessages('Channel');

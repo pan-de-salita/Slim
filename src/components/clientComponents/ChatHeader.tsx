@@ -16,12 +16,22 @@ interface ChatHeaderProps {
     recipientType: string,
     recipientName: string | Channel,
     availableUsers: User[],
-}
+};
+
+interface ChannelMemberDetails {
+    channel_id: number,
+    created_at: string,
+    id: number,
+    updated_at: string,
+    user_id: number,
+};
 
 const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeaderProps) => {
-    const [channelMembers, setChannelMembers] = useState([]);
+    const [channelMembers, setChannelMembers] = useState<User[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-    const [channelFormContent, setChannelFormContent] = useState<ChannelFormContent>({ channelName: '', channelMembers: [] });
+    const [channelFormContent, setChannelFormContent] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSuccessfulAdd, setIsSuccessfulAdd] = useState(false);
     const [debouncedValue] = useDebounce(filteredUsers, 300);
     const {
         control,
@@ -32,18 +42,24 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
     });
 
     const getChannelDetails = async () => {
-        if (recipientType === 'Channel') {
-            const channelDetails = await handleGetChannelDetails(recipientName.id)
-            const memberIds = channelDetails.data.channel_members.map((member) => member.user_id);
-            const members = availableUsers.reduce((acc, cur) => {
-                if (memberIds.includes(cur.id)) {
-                    return [...acc, cur];
-                }
-
-                return acc;
-            }, []);
-
-            setChannelMembers(members);
+        setIsLoading(true);
+        if (recipientType === 'Channel' && typeof recipientName !== 'string') {
+            try {
+                const channelDetails = await handleGetChannelDetails(recipientName.id);
+                const memberIds = channelDetails.data.channel_members.map((member: ChannelMemberDetails) => member.user_id);
+                const members = availableUsers.reduce((acc: User[], cur: User): User[] => {
+                    if (memberIds.includes(cur.id)) {
+                        return [...acc, cur];
+                    }
+                    return acc;
+                }, []);
+                setChannelMembers(members);
+                setIsSuccessfulAdd(false);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
@@ -51,21 +67,29 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
         const newMember = data.addChannelMembers.value;
 
         const addMemberToChannel = async () => {
-            try {
-                const response = await fetch(`${BASE_API_URL}/channel/add_member`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...getRequestHeaders(),
-                    },
-                    body: JSON.stringify({ id: recipientName.id, member_id: newMember }),
-                });
+            if (typeof recipientName === 'string') {
+                return
+            } else {
+                try {
+                    const response = await fetch(`${BASE_API_URL}/channel/add_member`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...getRequestHeaders(),
+                        },
+                        body: JSON.stringify({
+                            id: recipientName.id,
+                            member_id: newMember
+                        }),
+                    });
 
-                const data = await response.json();
-                setChannelMembers(data.data.channel_members);
-            } catch (error) {
-                if (error instanceof Error) {
-                    console.log(error);
+                    const data = await response.json();
+                    setIsSuccessfulAdd(true);
+                    return data;
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.log(error);
+                    }
                 }
             }
         };
@@ -76,10 +100,9 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
         });
     };
 
-
     useEffect(() => {
         getChannelDetails();
-    }, [recipientName, recipientType])
+    }, [recipientName, recipientType, isSuccessfulAdd])
 
     return (
         <>
@@ -89,10 +112,26 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
                         recipientName === 'Slimbot'
                             ? <img className='bg-purple-900 rounded-md w-[1.5rem] h-[1.5rem]' src={slimBot} alt='SlimBot profile picture' />
                             : <div className={`flex justify-center items-center ${recipientType === 'User' ? 'bg-green-800' : 'bg-blue-800'} rounded-md w-[1.5rem] h-[1.5rem]`}>
-                                <span className='w-auto h-auto text-md leading-tight font-bold text-white text-center'>{recipientType === 'User' ? recipientName[0].toUpperCase() : recipientName.name[0].toUpperCase()}</span>
+                                <span className='w-auto h-auto text-md leading-tight font-bold text-white text-center'>
+                                    {
+                                        typeof recipientName === 'string'
+                                            ? recipientType === 'User'
+                                                ? recipientName[0].toUpperCase()
+                                                : null
+                                            : recipientName.name[0].toUpperCase()
+                                    }
+                                </span>
                             </div>
                     }
-                    <span className='text-xl font-black text-[#1d1c1d]'>{recipientName === 'Slimbot' || recipientType === 'User' ? recipientName : recipientName.name}</span>
+                    <span className='text-xl font-black text-[#1d1c1d]'>
+                        {
+                            typeof recipientName === 'string'
+                                ? recipientName === 'Slimbot' || recipientType === 'User'
+                                    ? recipientName
+                                    : null
+                                : recipientName.name
+                        }
+                    </span>
                 </div>
             </div >
             {
@@ -100,10 +139,14 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
                     ?
                     <div className='pl-[1.25rem] pr-[0.75rem] pb-[1rem]'>
                         <div className='pb-[0.5rem] h-auto flex items-center flex-wrap gap-2'>
-                            <span>Members:</span>
-                            {channelMembers.map((member) => {
-                                return <span className='bg-gray-200 px-1 rounded-md'>{member.uid}</span>
-                            })}
+                            <span className='font-bold'>Members:</span>
+                            {
+                                isLoading
+                                    ? <span className='font-bold'>Loading... </span>
+                                    : channelMembers.map((member: User) => {
+                                        return <span key={member.uid + new Date()} className='bg-gray-200 px-1 rounded-md'>{member.uid}</span>
+                                    })
+                            }
                         </div>
                         <form onSubmit={handleSubmit(addNewMemberToChannel)} className='flex items-center gap-2'>
                             <div className='w-full'>
@@ -115,7 +158,6 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
                                             {...field}
                                             placeholder='Add members'
                                             onInputChange={(value) => {
-                                                console.log(availableUsers)
                                                 value ? setFilteredUsers(availableUsers.filter((user) => user.uid.includes(value) && user.uid !== getFromLocalStorage('user'))) : setFilteredUsers([]);
                                             }}
                                             options={debouncedValue.map(({ id, uid }: { uid: string, id: number }) => {
@@ -123,20 +165,24 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
                                             })}
                                             styles={customDropdownStylesForChatHeader}
                                             onChange={(selectedOption) => {
-                                                setChannelFormContent({ newMember: selectedOption });
+                                                setChannelFormContent(selectedOption);
                                                 field.onChange(selectedOption);
                                             }}
                                         />
                                     )}
                                 />
                             </ div>
-                            <button type='submit' className='w-[1.25rem] h-full'>
+                            <button
+                                type='submit'
+                                className='w-[1.25rem] h-full flex justify-center items-center'
+                                disabled={!channelFormContent ? true : false}
+                            >
                                 <IoMdAdd />
                             </button>
                         </form>
 
                     </div>
-                    : undefined
+                    : null
             }
             <div className='w-full border-b-[0.063rem] border-solid border-[#e3e3e2] b-t-0 b-l-0 b-r-0'></div>
         </>

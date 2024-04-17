@@ -6,6 +6,9 @@ import { RequestHeaders } from "../types/RequestHeaders";
 import { CreateChannelData } from "../types/apiData";
 import { getFromLocalStorage } from "../utils/localStorageFunctions";
 import { formatDate, formatTime, getMinutes } from "../utils/dateAndTimeFunctions";
+import { User } from "../types/userType";
+import { Channel } from "../types/Channel";
+import { ChatMessages } from "../types/ChatMessages";
 
 // POST
 export const useCreateChannel = (requestBody: CreateChannelRequestBody | null) => {
@@ -236,14 +239,11 @@ export const useRetrieveMessages = async (params: RetrieveMessagesParams | null)
 	const [data, setData] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 
-	console.log(params)
 	useEffect(() => {
 		if (!params) return;
-		console.log('more' + params)
 
 		const retrieveMessages = async () => {
 			setIsLoading(true);
-			console.log(params)
 			try {
 				const response = await fetch(`${BASE_API_URL}/messages?receiver_id=${params.id}&receiver_class=${params.class}`, {
 					method: 'GET',
@@ -257,42 +257,52 @@ export const useRetrieveMessages = async (params: RetrieveMessagesParams | null)
 
 				if (data.data) {
 					setData(
-						data.data.reduce((acc, cur) => {
-							if (acc.length === 0 || formatDate(new Date(cur.created_at)) !== acc[acc.length - 1].date) {
+						data.data.reduce(
+							(
+								acc: ChatMessages[],
+								cur: {
+									body: string,
+									created_at: string,
+									id: number,
+									receiver: User,
+									sender: User,
+								}
+							): ChatMessages[] => {
+								if (acc.length === 0 || formatDate(new Date(cur.created_at)) !== acc[acc.length - 1].date) {
+									return [
+										...acc,
+										{
+											date: formatDate(new Date(cur.created_at)),
+											messages: [
+												{
+													currentSender: cur.sender.uid,
+													time: formatTime(new Date(cur.created_at)),
+													text: cur.body,
+													isShowDetails: true,
+													lastIsShowDetails: formatTime(new Date(cur.created_at)),
+												}
+											]
+										}
+									]
+								}
+
 								return [
-									...acc,
+									...acc.slice(0, acc.length - 1),
 									{
-										date: formatDate(new Date(cur.created_at)),
+										...acc[acc.length - 1],
 										messages: [
+											...acc[acc.length - 1].messages,
 											{
-												sender: cur.sender.uid,
+												currentSender: cur.sender.uid,
 												time: formatTime(new Date(cur.created_at)),
 												text: cur.body,
-												isShowDetails: true,
-												lastIsShowDetails: formatTime(new Date(cur.created_at)),
+												isShowDetails: Math.abs(getMinutes(acc[acc.length - 1].messages[acc[acc.length - 1].messages.length - 1].lastIsShowDetails) - getMinutes(formatTime(new Date(cur.created_at)))) >= 10,
+												lastIsShowDetails: Math.abs(getMinutes(acc[acc.length - 1].messages[acc[acc.length - 1].messages.length - 1].lastIsShowDetails) - getMinutes(formatTime(new Date(cur.created_at)))) >= 10 ? formatTime(new Date(cur.created_at)) : acc[acc.length - 1].messages[acc[acc.length - 1].messages.length - 1].lastIsShowDetails,
 											}
 										]
 									}
 								]
-							}
-
-							return [
-								...acc.slice(0, acc.length - 1),
-								{
-									...acc[acc.length - 1],
-									messages: [
-										...acc[acc.length - 1].messages,
-										{
-											sender: cur.sender.uid,
-											time: formatTime(new Date(cur.created_at)),
-											text: cur.body,
-											isShowDetails: Math.abs(getMinutes(acc[acc.length - 1].messages[acc[acc.length - 1].messages.length - 1].lastIsShowDetails) - getMinutes(formatTime(new Date(cur.created_at)))) >= 10,
-											lastIsShowDetails: Math.abs(getMinutes(acc[acc.length - 1].messages[acc[acc.length - 1].messages.length - 1].lastIsShowDetails) - getMinutes(formatTime(new Date(cur.created_at)))) >= 10 ? formatTime(new Date(cur.created_at)) : acc[acc.length - 1].messages[acc[acc.length - 1].messages.length - 1].lastIsShowDetails,
-										}
-									]
-								}
-							]
-						}, [])
+							}, [])
 					);
 				}
 			} catch (error) {
@@ -311,8 +321,17 @@ export const useRetrieveMessages = async (params: RetrieveMessagesParams | null)
 };
 
 // TODO: fix typing
-export const useFetchAvailableUsers = (usersAndChannels) => {
-	const [availableUsers, setAvailableUsers] = useState([]);
+export const useFetchAvailableUsers = (
+	usersAndChannels: {
+		users: {
+			data: User[];
+		};
+		channels: {
+			data: Channel[];
+		};
+		updateChannels: () => void;
+	}): User[] => {
+	const [availableUsers, setAvailableUsers] = useState<User[]>([]);
 
 	useEffect(() => {
 		const getAllChannelIds = async () => {
@@ -344,8 +363,8 @@ export const useFetchAvailableUsers = (usersAndChannels) => {
 
 		const fetchData = async () => {
 			const allChannelInfo = await getAllChannelIds();
-			const allAvailableUserIds = [...new Set(allChannelInfo.map(({ data }) => data.channel_members.map(({ user_id }) => user_id)).flat())];
-			setAvailableUsers(usersAndChannels.users.data.reduce<User[]>((acc, cur) => {
+			const allAvailableUserIds = [...new Set(allChannelInfo.map(({ data }) => data.channel_members.map(({ user_id }: { user_id: number }) => user_id)).flat())];
+			setAvailableUsers(usersAndChannels.users.data.reduce<User[]>((acc, cur): User[] => {
 				if (allAvailableUserIds.includes(cur.id) && cur.uid !== getFromLocalStorage('user')) {
 					return [...acc, cur];
 				}

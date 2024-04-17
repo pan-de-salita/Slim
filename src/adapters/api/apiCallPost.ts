@@ -1,7 +1,7 @@
 import { LoginFormData } from '../../types/loginFormData';
 import { LoginSuccess, LoginFail } from '../../types/loginAttemptTypes';
 import { SubmitHandler } from 'react-hook-form';
-import { BASE_API_URL, LOGIN_URL_ENDPOINT, SEND_MESSAGE_URL_ENDPOINT, SIGNUP_URL_ENDPOINT } from '../../constants/apiConstants';
+import { LOGIN_URL_ENDPOINT, SEND_MESSAGE_URL_ENDPOINT, SIGNUP_URL_ENDPOINT } from '../../constants/apiConstants';
 import { SignupResponse } from '../../types/signupResponse';
 import { fetchRequestHeaders, getRequestHeaders } from '../../utils/requestHeadersFunctions';
 import { storeInLocalStorage } from '../../utils/localStorageFunctions';

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SearchUsersContext } from "../contexts/SearchUsersContext";
 import HomeSidebar from "../components/clientComponents/homeComponents/HomeSidebar";
 import HomeSidebarHeader from "../components/clientComponents/homeComponents/homeSidebarHeader";
@@ -12,19 +12,16 @@ import SlimbotIntro from "../components/clientComponents/homeComponents/SlimbotI
 import ChatHistory from "../components/clientComponents/ChatHistory";
 import ChatInput from "../components/clientComponents/ChatInput";
 import { useFetchAvailableUsers } from "../hooks/apiHooks";
-
-interface ChatMessages {
-  date: string,
-  messages: { time: string, text: string, isShowDetails: boolean }[],
-};
+import { ChatMessages } from "../types/ChatMessages";
+import { User } from "../types/userType";
 
 const Home = () => {
   const usersAndChannels = useContext(SearchUsersContext);
-  const availableUsers = useFetchAvailableUsers(usersAndChannels);
-  const [slimbotChatHistory, setSlimbotChatHistory] = useLocalStorage('slimbotChatHistory', defaultSlimbotChatHistory);
+  const availableUsers = useFetchAvailableUsers(usersAndChannels) as User[];
+  const [slimbotChatHistory, setSlimbotChatHistory] = useLocalStorage<ChatMessages[]>('slimbotChatHistory', defaultSlimbotChatHistory);
   const [messagesToSlimbot, setMessagesToSlimbot] = useState<ChatMessages[]>(slimbotChatHistory);
-  const [expandList, setExpandList] = useState({ Channel: true, User: true, });
-  const [recipientsUid, setRecipientsUid] = useState('Slimbot');
+  const [expandList, setExpandList] = useState({ Channel: true, User: true });
+  const [recipientsUid, setRecipientsUid] = useState<string | number>('Slimbot');
   const [recipientsType, setRecipientsType] = useState('Slimbot');
 
   const toggleExpand = (listType: keyof ExpandListValue) => {
@@ -48,14 +45,12 @@ const Home = () => {
     return lastIsShowDetailsTime;
   };
 
-  const changeRecipients = (newRecipients: string) => {
-    console.log(typeof newRecipients)
+  const changeRecipients = (newRecipients: string | number) => {
     setRecipientsUid(newRecipients);
     setRecipientsType(typeof newRecipients === 'string' ? 'User' : 'Channel');
   };
 
   useEffect(() => {
-    console.log(usersAndChannels.channels.data)
     setSlimbotChatHistory(messagesToSlimbot);
 
   }, [messagesToSlimbot]);
@@ -92,8 +87,8 @@ const Home = () => {
             ? <ChatHistory messages={messagesToSlimbot} />
             : <ChatHistory
               recipient={recipientsType === 'User'
-                ? availableUsers.filter((user) => user.uid === recipientsUid)[0]
-                : usersAndChannels.channels.data.filter((channel) => channel.id === recipientsUid)[0]}
+                ? availableUsers.find((user) => user.uid === recipientsUid)
+                : usersAndChannels.channels.data.find((channel) => channel.id === recipientsUid)}
             />
           }
         </div>
@@ -107,8 +102,8 @@ const Home = () => {
               recipientType={recipientsType}
               recipient={
                 typeof recipientsUid === 'string'
-                  ? availableUsers.filter((user) => user.uid === recipientsUid)[0]
-                  : usersAndChannels.channels.data.filter((channel) => channel.id === recipientsUid)[0]
+                  ? availableUsers.find((user) => user.uid === recipientsUid)
+                  : usersAndChannels.channels.data.find((channel) => channel.id === recipientsUid)
               }
               lastIsShowDetails={getLastIsShowDetails()}
             />

@@ -1,5 +1,4 @@
 import { User } from "../../../types/userType";
-import { BiSolidMessageSquareDetail } from "react-icons/bi";
 import { IoMdArrowDropright } from "react-icons/io";
 import { Channel } from "../../../types/Channel";
 
@@ -15,7 +14,7 @@ const HomeSidebarList = (
         list: User[] | Channel[],
         isExpandList: boolean,
         handleExpandList: () => void,
-        toggleChangeRecipients: (newRecipients: string) => void;
+        toggleChangeRecipients: (newRecipients: string | number) => void;
     }
 ) => {
     return (
@@ -37,11 +36,10 @@ const HomeSidebarList = (
                         <button
                             key={item.id}
                             onClick={() => {
-                                console.log(item)
-                                if (listType === 'User') {
-                                    toggleChangeRecipients(item.uid);
+                                if (listType === 'User' && 'uid' in item) {
+                                    toggleChangeRecipients(item.uid as string);
                                 } else {
-                                    toggleChangeRecipients(item.id);
+                                    toggleChangeRecipients(item.id as number);
                                 }
                             }}
                             className='w-auto md:w-auto lg:w-full h-[1.75rem] flex justify-between md:justify-start lg:justify-start items-center gap-2 hover:bg-[#d8d8da] rounded-md outline-0'
@@ -50,16 +48,20 @@ const HomeSidebarList = (
                                 {
                                     listType === 'Channel'
                                         ? <div className={`my-2 h-[1.25rem] w-[1.25rem] flex justify-center items-center bg-blue-800 rounded-md`}>
-                                            <span className='w-full h-auto text-xs leading-tight font-bold text-white text-center'>{item.uid ? item.uid[0].toUpperCase() : item.name[0].toUpperCase()}</span>
+                                            <span className='w-full h-auto text-xs leading-tight font-bold text-white text-center'>
+                                                {'uid' in item ? item.uid[0].toUpperCase() : item.name[0].toUpperCase()}
+                                            </span>
                                         </div>
 
                                         : <div className={`my-2 h-[1.25rem] w-[1.25rem] flex justify-center items-center bg-green-800 rounded-md`}>
-                                            <span className='w-full h-auto text-xs leading-tight font-bold text-white text-center'>{item.uid ? item.uid[0].toUpperCase() : ''}</span>
+                                            <span className='w-full h-auto text-xs leading-tight font-bold text-white text-center'>
+                                                {'uid' in item ? item.uid[0].toUpperCase() : ''}
+                                            </span>
                                         </div>
 
                                 }
                             </div>
-                            <span className='truncate'>{listType === 'Channel' ? item.name : item.uid}</span>
+                            <span className='truncate'>{listType === 'User' && 'uid' in item ? item.uid : item.name}</span>
                             <span className='text-[#8f8d92]'>{listType === 'Channel' ? 'channel' : 'guest'}</span>
                         </button>
                     );

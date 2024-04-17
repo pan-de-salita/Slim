@@ -1,6 +1,6 @@
 export interface ChatMessages {
     date: string,
-    messages: { time: string, text: string, isShowDetails: boolean }[],
+    messages: { currentSender: string, time: string, text: string, isShowDetails: boolean, lastIsShowDetails: string }[],
 };
 
 

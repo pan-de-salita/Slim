@@ -6,6 +6,7 @@ import { IoSend } from "react-icons/io5";
 import { getFromLocalStorage } from "../../utils/localStorageFunctions";
 import { User } from "../../types/userType";
 import { handleSendMessage } from "../../adapters/api/apiCallPost";
+import { Channel } from "../../types/Channel";
 
 type FormValue = {
     message: string,
@@ -14,11 +15,15 @@ type FormValue = {
 interface ChatInputProps {
     lastIsShowDetails: string,
     handleMessages?: React.Dispatch<React.SetStateAction<ChatMessages[]>>,
-    recipientType?: 'string',
-    recipient?: User,
+    recipientType?: string,
+    recipient?: User | Channel,
 };
 
-const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, recipientType }: ChatInputProps) => {
+const ChatInput = ({
+    lastIsShowDetails,
+    handleMessages,
+    recipient,
+    recipientType }: ChatInputProps) => {
     const [currentIsShowDetailsTime, setCurrentIsShowDetailsTime] = useState(lastIsShowDetails);
     const [textAreaContent, setTextAreaContent] = useState('');
     const {
@@ -92,8 +97,6 @@ const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, recipientType
             ]
         });
 
-        console.log(recipient)
-        console.log('sent to slimbot')
         reset();
         const textarea = document.querySelector('textarea')!;
         textarea.style.height = 'auto';
@@ -107,7 +110,6 @@ const ChatInput = ({ lastIsShowDetails, handleMessages, recipient, recipientType
             body: message,
         });
 
-        console.log(`sent to ${recipient}`)
         reset();
         const textarea = document.querySelector('textarea')!;
         textarea.style.height = 'auto';

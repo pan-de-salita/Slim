@@ -1,8 +1,8 @@
 import { BASE_API_URL, LIST_ALL_CHANNELS_URL_ENDPOINT, LIST_ALL_USERS_URL_ENDPOINT } from '../../constants/apiConstants';
+import { ChatMessages } from '../../types/ChatMessages';
 import { RetrieveMessagesParams } from '../../types/apiRequestBodyTypes';
 import { User } from '../../types/userType';
 import { formatDate, formatTime, getMinutes } from '../../utils/dateAndTimeFunctions';
-import { getFromLocalStorage } from '../../utils/localStorageFunctions';
 import { getRequestHeaders } from '../../utils/requestHeadersFunctions';
 
 export const handleListAllUsers = async (): Promise<User[] | Error | undefined> => {
@@ -43,9 +43,10 @@ export const handleListAllChannels = async () => {
     }
 };
 
-export const handleRetrieveMessages = async (params: RetrieveMessagesParams | null) => {
+export const handleRetrieveMessages = async (
+    params: RetrieveMessagesParams | null
+): Promise<ChatMessages[] | undefined> => {
     if (!params) return;
-    console.log(params)
 
     try {
         const response = await fetch(`${BASE_API_URL}/messages?receiver_id=${params.id!}&receiver_class=${params.class}`, {
@@ -57,13 +58,10 @@ export const handleRetrieveMessages = async (params: RetrieveMessagesParams | nu
         });
 
         const data = await response.json();
-        console.log(data)
 
         if (data.data) {
             return formatMessages(data.data);
         }
-
-        console.log(data)
 
     } catch (error) {
         if (error instanceof Error) {
@@ -74,7 +72,6 @@ export const handleRetrieveMessages = async (params: RetrieveMessagesParams | nu
 
 export const handleGetChannelDetails = async (params: number | null) => {
     if (!params) return;
-    console.log(params)
 
     try {
         const response = await fetch(`${BASE_API_URL}/channels/${params}`, {
@@ -86,7 +83,6 @@ export const handleGetChannelDetails = async (params: number | null) => {
         });
 
         const data = await response.json();
-        console.log(data)
         return data;
     } catch (error) {
         if (error instanceof Error) {
@@ -95,8 +91,25 @@ export const handleGetChannelDetails = async (params: number | null) => {
     }
 };
 
-const formatMessages = (messages) => {
-    const formattedMessages = messages.reduce((acc, cur) => {
+const formatMessages = (
+    messages: {
+        body: string,
+        created_at: string,
+        id: number,
+        receiver: User,
+        sender: User,
+    }[]
+) => {
+    const formattedMessages = messages.reduce((
+        acc: ChatMessages[],
+        cur: {
+            body: string,
+            created_at: string,
+            id: number,
+            receiver: User,
+            sender: User,
+        }
+    ): ChatMessages[] => {
         if (
             acc.length === 0
             || formatDate(new Date(cur.created_at)) !== acc[acc.length - 1].date
