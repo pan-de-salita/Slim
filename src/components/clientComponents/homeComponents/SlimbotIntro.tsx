@@ -1,6 +1,6 @@
 import slimBot from '../../../assets/slim-bot.png';
 
-const SlimbotIntro = ({ recipient }: { recipient: string }) => {
+const SlimbotIntro = ({ recipientsType, recipient }: { recipientsType: string, recipient: string }) => {
     return (
         <div className='px-[1.25rem] w-full pt-5'>
             {
@@ -12,8 +12,8 @@ const SlimbotIntro = ({ recipient }: { recipient: string }) => {
                 {
                     recipient === "Slimbot"
                         ? <img className='mt-2 bg-purple-900 rounded-md w-[3rem] h-[3rem]' src={slimBot} alt='SlimBot profile picture' />
-                        : <div className={`my-2 h-[3rem] w-[3rem] flex justify-center items-center ${recipient && recipient.length % 2 === 0 ? 'bg-green-800' : recipient && recipient.length % 3 === 0 ? 'bg-red-800' : 'bg-blue-800'} rounded-md w-[3rem] h-[3rem]`}>
-                            <span className='w-[3rem] h-auto text-xl leading-tight font-bold text-white text-center'>{recipient ? recipient[0].toUpperCase() : ''}</span>
+                        : <div className={`my-2 h-[3rem] w-[3rem] flex justify-center items-center ${recipientsType === 'User' ? 'bg-green-800' : 'bg-blue-800'} rounded-md w-[3rem] h-[3rem]`}>
+                            < span className='w-[3rem] h-auto text-xl leading-tight font-bold text-white text-center'>{recipient ? recipient[0].toUpperCase() : ''}</span>
                         </div>
                 }
                 {
@@ -29,7 +29,7 @@ const SlimbotIntro = ({ recipient }: { recipient: string }) => {
                         </div>
                 }
             </div>
-        </div>
+        </div >
     );
 };
 

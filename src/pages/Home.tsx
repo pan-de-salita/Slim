@@ -56,7 +56,7 @@ const Home = () => {
   }, [messagesToSlimbot]);
 
   return (
-    <div className='w-full h-full grid grid-cols-[25%_auto] bg-white rounded-md shadow-2xl mr-1'>
+    <div className='w-full h-full grid grid-cols-[25%_75%] bg-white rounded-md shadow-2xl'>
       <HomeSidebar>
         <HomeSidebarHeader />
         <HomeSidebarList
@@ -81,8 +81,11 @@ const Home = () => {
           availableUsers={usersAndChannels.users.data}
         />
         <div className={`w-full flex-grow flex flex-col items-center overflow-y-auto scroll-smooth`}>
-          <div className='h-[50rem]' />
-          <SlimbotIntro recipient={typeof recipientsUid === 'string' ? recipientsUid : usersAndChannels.channels.data.filter((channel) => channel.id === recipientsUid)[0].name} />
+          <div className='h-[28.5rem]' />
+          <SlimbotIntro
+            recipientsType={recipientsType}
+            recipient={typeof recipientsUid === 'string' ? recipientsUid : usersAndChannels.channels.data.filter((channel) => channel.id === recipientsUid)[0].name}
+          />
           {recipientsUid === 'Slimbot'
             ? <ChatHistory messages={messagesToSlimbot} />
             : <ChatHistory

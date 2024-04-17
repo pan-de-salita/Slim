@@ -1,6 +1,7 @@
 import { User } from "../../../types/userType";
 import { IoMdArrowDropright } from "react-icons/io";
 import { Channel } from "../../../types/Channel";
+import slimBot from '../../../assets/slim-bot.png';
 
 const HomeSidebarList = (
     {
@@ -31,6 +32,22 @@ const HomeSidebarList = (
                 </button>
             </div>
             <div className={isExpandList === true ? `block` : `hidden`}>
+                {
+                    listType === 'User'
+                    && <button
+                        onClick={() => {
+                            toggleChangeRecipients('Slimbot');
+                        }}
+                        className='w-auto md:w-auto lg:w-full h-[1.75rem] flex justify-between md:justify-start lg:justify-start items-center gap-2 hover:bg-[#d8d8da] rounded-md outline-0'
+                    >
+                        <div className='w-[1.625rem] h-[1.625rem] flex justify-center items-center'>
+                            <div className={`my-2 h-[1.25rem] w-[1.25rem] flex justify-center items-center rounded-md`}>
+                                <img className='bg-purple-900 rounded-md' src={slimBot} alt='SlimBot profile picture' />
+                            </div>
+                        </div>
+                        <span className='truncate'>Slimbot</span>
+                    </button>
+                }
                 {list.map((item) => {
                     return (
                         <button

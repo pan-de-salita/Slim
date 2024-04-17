@@ -13,9 +13,9 @@ const Client = () => {
 
   return (
     <>
-      <div className='relative w-screen h-screen flex flex-col bg-[#7db643]'>
+      <div className='relative w-screen h-screen flex flex-col items-around bg-[#7db643]'>
         <ClientToolbar />
-        <div className='h-full max-h-[95.3%] flex justify-between'>
+        <div className='h-[95.6%] mb-1 mr-1 flex justify-between'>
           <ClientSidebar toggleOpenCreateChannelModal={handleCreateChannelModal} />
           <Outlet />
         </div>
