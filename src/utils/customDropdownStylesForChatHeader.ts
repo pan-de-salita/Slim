@@ -1,6 +1,13 @@
 import { StylesConfig } from 'react-select';
 
-const customDropdownStylesForChatHeader: StylesConfig<OptionTypeBase, IsMulti> = {
+type OptionType = {
+    label: string;
+    value: string;
+};
+
+type IsMulti = false;
+
+const customDropdownStylesForChatHeader: StylesConfig<OptionType, IsMulti> = {
     control: (provided) => ({
         ...provided,
         border: '1px solid #bababa50',

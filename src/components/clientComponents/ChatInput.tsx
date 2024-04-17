@@ -43,59 +43,61 @@ const ChatInput = ({
             setCurrentIsShowDetailsTime(newTime);
         }
 
-        handleMessages((prev) => {
-            if (prev.length >= 1) {
-                if (prev[prev.length - 1].date !== formatDate(new Date())) {
-                    return [
-                        ...prev,
-                        {
-                            date: newDate,
-                            messages: [
-                                {
-                                    currentSender: currentUser,
-                                    time: newTime,
-                                    text: message,
-                                    isShowDetails: true,
-                                    lastIsShowDetails: newDate,
-                                }
-                            ],
-                        },
-                    ];
-                } else {
-                    return [
-                        ...prev.slice(0, prev.length - 1),
-                        {
-                            ...prev[prev.length - 1],
-                            messages: [
-                                ...prev[prev.length - 1].messages,
-                                {
-                                    currentSender: currentUser,
-                                    time: newTime,
-                                    text: message,
-                                    isShowDetails: !isMoreThanTenMinutes ? false : true,
-                                    lastIsShowDetails: !isMoreThanTenMinutes ? newTime : getMinutes(currentIsShowDetailsTime),
-                                },
-                            ],
-                        },
-                    ];
+        if (handleMessages) {
+            handleMessages((prev) => {
+                if (prev.length >= 1) {
+                    if (prev[prev.length - 1].date !== formatDate(new Date())) {
+                        return [
+                            ...prev,
+                            {
+                                date: newDate,
+                                messages: [
+                                    {
+                                        currentSender: currentUser,
+                                        time: newTime,
+                                        text: message,
+                                        isShowDetails: true,
+                                        lastIsShowDetails: newDate,
+                                    }
+                                ],
+                            },
+                        ];
+                    } else {
+                        return [
+                            ...prev.slice(0, prev.length - 1),
+                            {
+                                ...prev[prev.length - 1],
+                                messages: [
+                                    ...prev[prev.length - 1].messages,
+                                    {
+                                        currentSender: currentUser,
+                                        time: newTime,
+                                        text: message,
+                                        isShowDetails: !isMoreThanTenMinutes ? false : true,
+                                        lastIsShowDetails: !isMoreThanTenMinutes ? newTime : lastIsShowDetails,
+                                    },
+                                ],
+                            },
+                        ];
+                    }
                 }
-            }
 
-            return [
-                {
-                    date: newDate,
-                    messages: [
-                        {
-                            currentSender: currentUser,
-                            time: newTime,
-                            text: message,
-                            isShowDetails: true,
-                            lastIsShowDetails: newTime,
-                        },
-                    ],
-                },
-            ]
-        });
+                return [
+                    {
+                        date: newDate,
+                        messages: [
+                            {
+                                currentSender: currentUser,
+                                time: newTime,
+                                text: message,
+                                isShowDetails: true,
+                                lastIsShowDetails: newTime,
+                            },
+                        ],
+                    },
+                ]
+            });
+        }
 
         reset();
         const textarea = document.querySelector('textarea')!;

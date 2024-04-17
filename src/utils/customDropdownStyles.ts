@@ -5,7 +5,7 @@ type OptionType = {
     value: string;
 };
 
-type IsMulti = false; // Change this to true if multiple selections are allowed
+type IsMulti = true;
 
 const customDropdownStyles: StylesConfig<OptionType, IsMulti> = {
     control: (provided) => ({
