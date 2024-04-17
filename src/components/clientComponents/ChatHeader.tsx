@@ -174,10 +174,10 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
                             </ div>
                             <button
                                 type='submit'
-                                className='w-[1.25rem] h-full flex justify-center items-center'
+                                className={`w-[1.875rem] h-[1.875rem] flex justify-center items-center rounded-md ${!channelFormContent ? '' : 'bg-[#007b5b]'} outline-none`}
                                 disabled={!channelFormContent ? true : false}
                             >
-                                <IoMdAdd />
+                                <IoMdAdd color={!channelFormContent ? '#69707C' : 'white'} />
                             </button>
                         </form>
 
