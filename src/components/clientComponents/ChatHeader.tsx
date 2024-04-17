@@ -95,6 +95,7 @@ const ChatHeader = ({ recipientType, recipientName, availableUsers }: ChatHeader
         };
 
         addMemberToChannel();
+        setChannelFormContent(null);
         reset({
             addChannelMembers: null,
         });
