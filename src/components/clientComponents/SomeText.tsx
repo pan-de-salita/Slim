@@ -1,5 +1,0 @@
-const AFunc = () => {
-      return (
-
-)
-}
