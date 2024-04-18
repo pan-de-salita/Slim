@@ -43,6 +43,7 @@ const ModalContainer = (
             channelName: null,
             channelMembers: null,
         });
+        setChannelFormContent({ channelName: '', channelMembers: [] });
     };
 
     useEffect(() => {

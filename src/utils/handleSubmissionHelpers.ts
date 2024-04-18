@@ -14,7 +14,6 @@ export const handleLoginAttempt = (
         navigate('/client');
         reset();
     } else {
-        console.log('wah')
         toastError('Hm... Are you sure you input the right credentials?');
     }
 };
