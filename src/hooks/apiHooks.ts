@@ -185,6 +185,7 @@ export const useListAllChannels = async (requestHeaders: RequestHeaders | null) 
 			} catch (error) {
 				if (error instanceof Error) {
 					setError(error);
+					console.log('Oops! No channels yet. Try creating one to chat with others.')
 				}
 			} finally {
 				setIsLoading(false);
@@ -356,7 +357,6 @@ export const useFetchAvailableUsers = (
 				const channelData = await Promise.all(channelDataPromises);
 				return channelData;
 			} catch (error) {
-				console.error('Failed to get all channel IDs:', error);
 				return [];
 			}
 		};

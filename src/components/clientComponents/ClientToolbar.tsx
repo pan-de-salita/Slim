@@ -13,7 +13,7 @@ const ClientToolbar = () => {
     };
 
     return (
-        <div className='w-full h-[10%] grid grid-cols-7 items-center'>
+        <div className='w-full grid grid-cols-7 items-center'>
             <div className='w-[1.75rem] h-[1.75rem] col-start-1 col-end-2 pl-[0.5rem]'></div>
             <div className='w-full h-[70%] flex items-center gap-2 col-start-3 col-end-6'>
                 <button className='w-full h-full bg-white flex justify-between items-center p-2 rounded-md'>
