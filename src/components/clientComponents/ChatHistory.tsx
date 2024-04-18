@@ -70,7 +70,7 @@ const ChatHistory = (
                                     return (
                                         <div
                                             key={text + time + idx}
-                                            className={`group hover:bg-[#d8d8da50] px-[1.25rem] flex ${isShowDetails ? 'items-start' : 'items-center'} gap-2 py-[0.1rem]`}
+                                            className={`group hover:bg-[#d8d8da50] px-[1.25rem] flex items-center gap-2 py-[0.1rem]`}
                                         >
                                             {
                                                 isShowDetails
@@ -85,7 +85,7 @@ const ChatHistory = (
                                                         <span className='invisible group-hover:visible text-[0.7rem] text-gray-500 pr-2'>{time.slice(0, 5)}</span>
                                                     </div>
                                             }
-                                            <div className={`flex flex-col ${isShowDetails ? 'justify-start' : 'justify-center'} min-w-0`}>
+                                            <div className={`flex flex-col ${isShowDetails ? 'justify-start' : 'justify-between'} gap-1 min-w-0`}>
                                                 {
                                                     isShowDetails
                                                         ? <div className='flex items-center gap-2'>

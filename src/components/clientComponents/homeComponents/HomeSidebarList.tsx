@@ -78,7 +78,9 @@ const HomeSidebarList = (
 
                                 }
                             </div>
-                            <span className='truncate'>{listType === 'User' && 'uid' in item ? item.uid : item.name}</span>
+                            <div>
+                                <span className='truncate'>{listType === 'User' && 'uid' in item ? item.uid : item.name}</span>
+                            </div>
                             <span className='text-[#8f8d92]'>{listType === 'Channel' ? 'channel' : 'guest'}</span>
                         </button>
                     );
