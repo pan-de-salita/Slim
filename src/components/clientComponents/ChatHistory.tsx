@@ -10,7 +10,7 @@ import { Channel } from "../../types/Channel";
 interface ChatHistoryProps {
     recipient?: User | Channel,
     messages?: ChatMessages[],
-};
+}
 
 const ChatHistory = (
     { recipient, messages }: ChatHistoryProps
@@ -92,7 +92,7 @@ const ChatHistory = (
                                                             <span className='text-md font-bold h-content'>{currentSender || getFromLocalStorage('user')}</span>
                                                             <span className='text-xs pt-1 text-gray-600'>{time}</span>
                                                         </div>
-                                                        : <div></div>
+                                                        : null
                                                 }
                                                 <p className='w-full break-words text-md'>{text}</p>
                                             </div>
