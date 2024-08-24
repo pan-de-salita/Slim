@@ -1,7 +1,7 @@
-import { createContext, useContext, useState } from 'react';
-import { AuthContextValue } from '../types/AuthContextValue';
-import { Navigate } from 'react-router-dom';
-import { getRequestHeaders } from '../utils/requestHeadersFunctions';
+import { createContext, useContext, useState } from "react";
+import { AuthContextValue } from "../types/AuthContextValue";
+import { Navigate } from "react-router-dom";
+import { getRequestHeaders } from "../utils/requestHeadersFunctions";
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
@@ -9,7 +9,7 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
 
   return context;
@@ -24,7 +24,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider value={{ isLogin, toggleIsLogin }}>
-      {getRequestHeaders() ? <Navigate to='/client' replace={true} /> : children}
+      {getRequestHeaders() ? (
+        <Navigate to="/client" replace={true} />
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };

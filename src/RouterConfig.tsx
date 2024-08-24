@@ -1,14 +1,17 @@
-import { createBrowserRouter, defer } from 'react-router-dom';
-import Login from './pages/Login';
-import Client from './pages/Client';
-import { AuthProvider } from './contexts/AuthContext';
-import { handleListAllChannels, handleListAllUsers } from './adapters/api/apiCallGet';
-import { SearchUsersContextProvider } from './contexts/SearchUsersContext';
-import Home from './pages/Home';
+import { createBrowserRouter, defer } from "react-router-dom";
+import Login from "./pages/Login";
+import Client from "./pages/Client";
+import { AuthProvider } from "./contexts/AuthContext";
+import {
+  handleListAllChannels,
+  handleListAllUsers,
+} from "./adapters/api/apiCallGet";
+import { SearchUsersContextProvider } from "./contexts/SearchUsersContext";
+import Home from "./pages/Home";
 
 const Router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: (
       <AuthProvider>
         <Login />
@@ -16,20 +19,18 @@ const Router = createBrowserRouter([
     ),
   },
   {
-    path: '/client',
+    path: "/client",
     element: (
       <SearchUsersContextProvider>
         <Client />
       </SearchUsersContextProvider>
     ),
-    id: 'client',
+    id: "client",
     loader: async () => {
-      return defer(
-        {
-          allUsers: handleListAllUsers(),
-          allChannels: handleListAllChannels(),
-        }
-      );
+      return defer({
+        allUsers: handleListAllUsers(),
+        allChannels: handleListAllChannels(),
+      });
     },
     children: [
       {
